@@ -1,7 +1,8 @@
 package bgu.spl.net.srv;
 
+import bgu.spl.net.srv.BGS.msg.LogStatInfo;
+
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -38,6 +39,37 @@ public boolean register (String name, String code, String date){
         users.get(name).logout();
         return true;
     }
+
+    public boolean logout(int connectionIdCurrUser){
+         return false; //Todo implement this
+    }
+
+    public boolean follow(int connectionIdCurrUser, String usernameToFollow){
+        return false; //Todo implement this
+
+    }
+
+    public boolean unFollow(int connectionIdCurrUser, String usernameToUnFollow) {
+        return false; //Todo implement this
+    }
+    public boolean post(int connectionIdCurrUser, String content){
+        return false; //Todo implement this
+    }
+
+    public boolean sendPM(String userToSendToHim, String content, String sendingDateAndTime){
+        // content given by the protocol in already filtered
+        return false; //Todo implement this
+    }
+
+    public HashMap<User, LogStatInfo> logStat(){
+        //Todo implement this
+        return null; //if need to send error return null. otherwise, return map with all relevant users and their info in a logStatInfo Object
+    }
+    public HashMap<User, LogStatInfo> stat(List<String> usernames){
+        //Todo implement this
+        return null; //if need to send error return null. otherwise, return map with all relevant users and their info in a logStatInfo Object
+    }
+
 
 
 

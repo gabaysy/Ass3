@@ -1,15 +1,13 @@
 package bgu.spl.net.srv.BGS.msg;
 
+import bgu.spl.net.api.bidi.Connections;
+import bgu.spl.net.srv.BgsDB;
+
 public class NotificationMsg implements Message{
     final short optCode;
     final PM_Public pmOrPublic;
     final String postingUser;
     final String content;
-
-    @Override
-    public void process() {
-
-    }
 
 
     enum PM_Public{
@@ -39,5 +37,10 @@ public class NotificationMsg implements Message{
 
     public String getContent() {
         return content;
+    }
+
+    @Override
+    public void process(BgsDB db, Connections connections, int connectionId) {
+
     }
 }
