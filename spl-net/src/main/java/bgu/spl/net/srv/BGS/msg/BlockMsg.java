@@ -1,6 +1,6 @@
 package bgu.spl.net.srv.BGS.msg;
 
-public class BlockMsg {
+public class BlockMsg implements Message{
     final short optcode;
     final String username;
 
@@ -17,4 +17,8 @@ public class BlockMsg {
     }
 
 
+    @Override
+    public void process() {
+
+    }
 }

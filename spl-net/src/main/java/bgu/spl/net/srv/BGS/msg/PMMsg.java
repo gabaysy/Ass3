@@ -52,5 +52,10 @@ public class PMMsg implements Message{
         }
         return filterContent;
     }
+
+    @Override
+    public void process() {
+
+    }
 }
 

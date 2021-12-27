@@ -1,6 +1,6 @@
 package bgu.spl.net.srv.BGS.msg;
 
-public class ErrorMsg {
+public class ErrorMsg implements Message{
     final short optcode;
 
     public ErrorMsg(short messageOptcode) {
@@ -9,4 +9,9 @@ public class ErrorMsg {
     }
 
     final short messageOptcode;
+
+    @Override
+    public void process() {
+
+    }
 }

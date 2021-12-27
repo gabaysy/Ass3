@@ -5,6 +5,11 @@ public class FollowMsg implements Message{
     final String username;
     final Follow_Unfollow follow_unfollow;
 
+    @Override
+    public void process() {
+
+    }
+
 
     enum Follow_Unfollow{
         FOLLOW,

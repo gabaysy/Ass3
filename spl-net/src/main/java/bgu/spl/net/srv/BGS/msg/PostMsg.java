@@ -17,5 +17,9 @@ public class PostMsg implements Message{
         return content;
     }
 
+    @Override
+    public void process() {
+
+    }
 }
 

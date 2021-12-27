@@ -2,6 +2,7 @@ package bgu.spl.net.srv.BGS;
 
 import bgu.spl.net.api.bidi.BidiMessagingProtocol;
 import bgu.spl.net.api.bidi.Connections;
+import bgu.spl.net.srv.BGS.msg.Message;
 import bgu.spl.net.srv.BgsDB;
 
 public class BgsProtocol implements BidiMessagingProtocol {
@@ -22,7 +23,8 @@ public class BgsProtocol implements BidiMessagingProtocol {
 
     @Override
     public void process(Object message) {
-
+        Message msgToProcess=(Message)message;
+        msgToProcess.process();
     }
 
     @Override
@@ -30,16 +32,4 @@ public class BgsProtocol implements BidiMessagingProtocol {
         return shouldTerminate;
     }
 
-    public void processRegister(){};
-    public void processLogin(){};
-    public void processLogout(){};
-    public void processFollow(){};
-    public void processPost(){};
-    public void processPM(){};
-    public void processLogStat(){};
-    public void processStat(){};
-    public void processNotification(){};
-    public void processAck(){};
-    public void processError(){};
-    public void processBlock(){};
 }

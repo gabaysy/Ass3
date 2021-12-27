@@ -3,7 +3,7 @@ package bgu.spl.net.srv.BGS.msg;
 import java.util.LinkedList;
 import java.util.List;
 
-public class StatMsg {
+public class StatMsg implements Message{
     final short optCode;
     final String ListOfUsernames;
     final List<String> seperatedUsernames;
@@ -18,6 +18,11 @@ public class StatMsg {
             seperatedUsernames.add(username);
         }
 
+
+    }
+
+    @Override
+    public void process() {
 
     }
 }

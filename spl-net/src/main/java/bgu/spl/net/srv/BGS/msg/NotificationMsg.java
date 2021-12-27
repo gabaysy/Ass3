@@ -1,10 +1,15 @@
 package bgu.spl.net.srv.BGS.msg;
 
-public class NotificationMsg {
+public class NotificationMsg implements Message{
     final short optCode;
     final PM_Public pmOrPublic;
     final String postingUser;
     final String content;
+
+    @Override
+    public void process() {
+
+    }
 
 
     enum PM_Public{

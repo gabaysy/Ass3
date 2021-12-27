@@ -8,5 +8,9 @@ public class LogoutMsg implements Message{
         this.optCode = 3;
     }
 
+    @Override
+    public void process() {
+
+    }
 }
 

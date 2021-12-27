@@ -31,4 +31,8 @@ public class LoginMsg implements Message{
         return captcha;
     }
 
+    @Override
+    public void process() {
+
+    }
 }

@@ -52,4 +52,9 @@ public class RegisterMsg implements Message{
         }
         return true;
     }
+
+    @Override
+    public void process() {
+
+    }
 }
