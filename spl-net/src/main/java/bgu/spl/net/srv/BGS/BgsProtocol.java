@@ -2,6 +2,7 @@ package bgu.spl.net.srv.BGS;
 
 import bgu.spl.net.api.bidi.BidiMessagingProtocol;
 import bgu.spl.net.api.bidi.Connections;
+import bgu.spl.net.srv.BgsDB;
 
 public class BgsProtocol implements BidiMessagingProtocol {
 
