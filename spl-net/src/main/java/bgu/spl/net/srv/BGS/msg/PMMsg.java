@@ -1,5 +1,7 @@
 package bgu.spl.net.srv.BGS.msg;
+import bgu.spl.net.api.bidi.Connections;
 import bgu.spl.net.srv.BGS.FilteredWords;
+import bgu.spl.net.srv.BgsDB;
 
 import java.util.Set;
 
@@ -10,14 +12,15 @@ public class PMMsg implements Message{
     final String sendingDateTime;
 
 
-    public PMMsg(String username, String content, String sendingDateTime) {
+    public PMMsg(String username, String content) {
         this.optCode = 6;
         this.username = username;
         this.content=filterContent(content);
-        if(isDateTimeValid(sendingDateTime)) //Todo need to validate?
-            this.sendingDateTime=sendingDateTime;
-        else
-            this.sendingDateTime="00-00-0000 00:00";
+        this.sendingDateTime="00"; //Todo put time
+//        if(isDateTimeValid(sendingDateTime)) //Todo need to validate?
+//            this.sendingDateTime=sendingDateTime;
+//        else
+//            this.sendingDateTime="00-00-0000 00:00";
     }
 
     public short getOptCode() {
@@ -51,6 +54,16 @@ public class PMMsg implements Message{
             }
         }
         return filterContent;
+    }
+
+    @Override
+    public void process(BgsDB db, Connections connections, int connectionId) {
+        boolean success= db.sendPM(this.getUsername(),this.getContent(),this.getSendingDateTime());
+        if(success){
+            connections.send(connectionId,new ACKMsg(this.getOptCode()));
+        }
+        else
+            connections.send(connectionId,new ErrorMsg(this.getOptCode()));
     }
 }
 
