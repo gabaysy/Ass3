@@ -85,4 +85,9 @@ public class User {
     public boolean isloggedin() {
         return loggedin;
     }
+
+    public boolean isFollowingAfter(String name) {
+        return (followings.contains(name));
+
+    }
 }

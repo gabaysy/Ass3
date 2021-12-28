@@ -39,9 +39,12 @@ public boolean register (String name, String code, String date){
         return true;
     }
 
+    public boolean follow(String name, String userToFollow) {
+        if (!users.containsKey(name) || !users.get(name).isloggedin() || !users.containsKey(userToFollow) || users.get(name).isFollowingAfter(userToFollow))
+            return false;
 
 
-
+    }
 
 
 
