@@ -19,7 +19,7 @@ public class LogstatMsg implements Message{
 
     @Override
     public void process(BgsDB db, Connections connections, int connectionId) {
-        HashMap<User, LogStatInfo> logStatsInfo= db.logStat();
+        HashMap<User, LogStatInfo> logStatsInfo= db.logStat(connectionId);// added parameter
         if(logStatsInfo!=null){
             for (LogStatInfo curr: logStatsInfo.values()) {//Todo make sure .values gets all values
                 connections.send(connectionId,new ACKMsg(this.getOptCode(),curr.toString()));

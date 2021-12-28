@@ -9,6 +9,7 @@ import java.util.Map;
 public class BgsDB {
     private Map<String, User> users;
     private int nextId;
+    private Map<Integer, User> usersById;
 
     public BgsDB (){
         this.users=new HashMap();
@@ -41,17 +42,35 @@ public boolean register (String name, String code, String date){
     }
 
     public boolean logout(int connectionIdCurrUser){
-         return false; //Todo implement this
+        if (!usersById.containsKey(connectionIdCurrUser))
+            return false;
+        User user =usersById.get(connectionIdCurrUser);
+        if (!user.isloggedin())
+            return false;
+        user.logout();
+        return true;
     }
 
     public boolean follow(int connectionIdCurrUser, String usernameToFollow){
-        return false; //Todo implement this
+        if (!usersById.containsKey(connectionIdCurrUser))
+            return false;
+        User user =usersById.get(connectionIdCurrUser);
+        if (! users.containsKey(usernameToFollow)  || (!user.isloggedin())||(user.isBlocked(users.get(usernameToFollow) )) )// not register/not logging/blocked
+            return false;
+        return user.follow(users.get(usernameToFollow));//false if already following
 
     }
 
     public boolean unFollow(int connectionIdCurrUser, String usernameToUnFollow) {
-        return false; //Todo implement this
+        if (!usersById.containsKey(connectionIdCurrUser))
+        return false;
+        User user =usersById.get(connectionIdCurrUser);
+        if (! users.containsKey(usernameToUnFollow)  || (!user.isloggedin()))  // not register/not logging
+            return false;
+        return user.unfollow(users.get(usernameToUnFollow));//false if not following
     }
+
+
     public boolean post(int connectionIdCurrUser, String content){
         return false; //Todo implement this
     }
@@ -61,16 +80,45 @@ public boolean register (String name, String code, String date){
         return false; //Todo implement this
     }
 
-    public HashMap<User, LogStatInfo> logStat(){
-        //Todo implement this
-        return null; //if need to send error return null. otherwise, return map with all relevant users and their info in a logStatInfo Object
-    }
-    public HashMap<User, LogStatInfo> stat(List<String> usernames){
-        //Todo implement this
-        return null; //if need to send error return null. otherwise, return map with all relevant users and their info in a logStatInfo Object
+    public HashMap<User, LogStatInfo> logStat(int connectionIdCurrUser){
+        if (!usersById.containsKey(connectionIdCurrUser)|| (!usersById.get(connectionIdCurrUser).isloggedin()))
+            return null;
+        HashMap<User, LogStatInfo> mapToReturn=new HashMap<>();
+
+        for( Map.Entry name: users.entrySet()) //todo
+        {
+            User currUser = (User) name.getValue();
+            mapToReturn.put(currUser,new LogStatInfo(currUser.getAge(),currUser.getNumPost(),currUser.getNumOfFollowers(),currUser.getNumOfFolloweing()));
+        }
+        return mapToReturn;
+
     }
 
+    public HashMap<User, LogStatInfo> stat(List<String> usernames,int connectionIdCurrUser){//if need to send error return null. otherwise, return map with all relevant users and their info in a logStatInfo Object
+        if (!usersById.containsKey(connectionIdCurrUser)|| (!usersById.get(connectionIdCurrUser).isloggedin()))
+            return null;
+        HashMap<User, LogStatInfo> mapToReturn=new HashMap<>();
 
+        for(String name : usernames){
+            User currUser =users.get(name);
+            mapToReturn.put(currUser,new LogStatInfo(currUser.getAge(),currUser.getNumPost(),currUser.getNumOfFollowers(),currUser.getNumOfFolloweing()));
+        }
+    return mapToReturn;
+    }
+
+    public boolean block(int connectionIdCurrUser, String usernameToblock){
+        if (!usersById.containsKey(connectionIdCurrUser))
+            return false;
+        User user =usersById.get(connectionIdCurrUser);
+        if (! users.containsKey(usernameToblock)  || (!user.isloggedin()))  // not register/not logging
+            return false;
+        User userToBlock=users.get(usernameToblock);
+
+        user.unfollow(userToBlock);
+        userToBlock.unfollow(user);
+        user.addToBlocked(userToBlock);
+        return true;
+    }
 
 
 

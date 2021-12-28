@@ -11,6 +11,8 @@ public class User {
     private String birthday;
     private List<User> followers;
     private List<User> followings;
+    private List<User> blocked;//
+
     private int age;
     private int NumPost;
     private boolean loggedin;
@@ -23,6 +25,7 @@ public class User {
         this.birthday=date;
         this.followers=new LinkedList<>() ;
         this.followings=new LinkedList<>() ;
+        this.blocked=new LinkedList<>();
         this.loggedin=false;
     }
 
@@ -90,4 +93,39 @@ public class User {
         return (followings.contains(name));
 
     }
+
+    public boolean follow(User usernameToFollow) {
+       if ( isFollowingAfter(usernameToFollow.getUsername()) )
+           return false;
+       this.followings.add(usernameToFollow);
+        usernameToFollow.followers.add(this);
+       return true;
+    }
+
+    public boolean unfollow(User usernameToUnFollow) {
+        if ( !isFollowingAfter(usernameToUnFollow.getUsername()) )
+            return false;
+        this.followings.remove(usernameToUnFollow);
+        usernameToUnFollow.followers.remove(this);
+        return true;
+
+    }
+
+
+    public void addToBlocked(User userToBlock) {
+        this.blocked.add(userToBlock);
+    }
+    public boolean isBlocked(User userToCheck) {
+       return (this.blocked.contains(userToCheck));
+    }
+
+    public  int getNumOfFollowers(){
+        return this.followers.size();
+    }
+
+    public  int getNumOfFolloweing(){
+        return this.followings.size();
+    }
+
+
 }

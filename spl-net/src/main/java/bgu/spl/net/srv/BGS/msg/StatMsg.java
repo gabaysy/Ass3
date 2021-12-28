@@ -38,7 +38,7 @@ public class StatMsg implements Message{
 
     @Override
     public void process(BgsDB db, Connections connections, int connectionId) {
-        HashMap<User, LogStatInfo> statsInfo= db.stat(this.getSeperatedUsernames());
+        HashMap<User, LogStatInfo> statsInfo= db.stat(this.getSeperatedUsernames(),connectionId);//added parameter
         if(statsInfo!=null){
             for (LogStatInfo curr: statsInfo.values()) {//Todo make sure .values gets all values
                 connections.send(connectionId,new ACKMsg(this.getOptCode(),curr.toString()));
