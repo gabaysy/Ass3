@@ -5,14 +5,15 @@ import bgu.spl.net.srv.BGS.msg.LogStatInfo;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class BgsDB {
-    private Map<String, User> users;
+    private ConcurrentHashMap<String, User> users;
     private int nextId;
-    private Map<Integer, User> usersById;
+    private ConcurrentHashMap<Integer, User> usersById;
 
     public BgsDB (){
-        this.users=new HashMap();
+        this.users=new ConcurrentHashMap();
         this.nextId=1;
     }
 

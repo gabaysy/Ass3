@@ -41,6 +41,6 @@ public class NotificationMsg implements Message{
 
     @Override
     public void process(BgsDB db, Connections connections, int connectionId) {
-
+        //not implemented- relevant to server-to-client only
     }
 }

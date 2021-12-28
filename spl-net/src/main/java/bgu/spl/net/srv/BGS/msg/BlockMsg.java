@@ -1,6 +1,9 @@
 package bgu.spl.net.srv.BGS.msg;
 
-public class BlockMsg implements Message{
+import bgu.spl.net.api.bidi.Connections;
+import bgu.spl.net.srv.BgsDB;
+
+public class BlockMsg implements Message {
     final short optcode;
     final String username;
 
@@ -8,7 +11,8 @@ public class BlockMsg implements Message{
         this.optcode = 12;
         this.username = username;
     }
-    public short getOptcode() {
+
+    public short getOptCode() {
         return optcode;
     }
 
@@ -16,9 +20,12 @@ public class BlockMsg implements Message{
         return username;
     }
 
-
     @Override
-    public void process() {
-
+    public void process(BgsDB db, Connections connections, int connectionId) {
+        boolean success = db.block(connectionId, this.getUsername());
+        if (success) {
+            connections.send(connectionId, new ACKMsg(this.getOptCode()));
+        } else
+            connections.send(connectionId, new ErrorMsg(this.getOptCode()));
     }
 }

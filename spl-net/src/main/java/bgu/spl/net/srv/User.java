@@ -2,6 +2,7 @@ package bgu.spl.net.srv;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class User {
 
@@ -16,6 +17,7 @@ public class User {
     private int age;
     private int NumPost;
     private boolean loggedin;
+  //  private AtomicBoolean loggedin; //use Atomic?
 
 
 

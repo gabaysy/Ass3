@@ -1,5 +1,8 @@
 package bgu.spl.net.srv.BGS.msg;
 
+import bgu.spl.net.api.bidi.Connections;
+import bgu.spl.net.srv.BgsDB;
+
 public class ErrorMsg implements Message{
     final short optcode;
 
@@ -11,7 +14,8 @@ public class ErrorMsg implements Message{
     final short messageOptcode;
 
     @Override
-    public void process() {
+    public void process(BgsDB db, Connections connections, int connectionId) {
+        //not implemented- relevant to server-to-client only
 
     }
 }
