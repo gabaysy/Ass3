@@ -1,26 +1,29 @@
 package bgu.spl.net.srv;
 
 import bgu.spl.net.srv.BGS.msg.LogStatInfo;
+import bgu.spl.net.srv.bidi.post;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class BgsDB {
     private ConcurrentHashMap<String, User> users;
     private int nextId;
     private ConcurrentHashMap<Integer, User> usersById;
+    private ConcurrentLinkedQueue<post> posts;
 
     public BgsDB (){
         this.users=new ConcurrentHashMap();
         this.nextId=1;
+        this.posts=new ConcurrentLinkedQueue<post>();
     }
 
 
 
-public boolean register (String name, String code, String date){
-//        if(containName(name))
+public boolean register (String name, String code, String date){ // todo put in usersById
     if(users.containsKey(name))
             return false;
         users.putIfAbsent(name,new User(name , code , date));
@@ -72,21 +75,33 @@ public boolean register (String name, String code, String date){
     }
 
 
-    public boolean post(int connectionIdCurrUser, String content){
-        return false; //Todo implement this
+    public boolean post(int connectionIdCurrUser, String content){ // cant assume  @ only for users
+        if (!usersById.containsKey(connectionIdCurrUser)|| (!usersById.get(connectionIdCurrUser).isloggedin())) //curruser not register or not logged in
+            return false;
+        this.posts.add(new post(usersById.get(connectionIdCurrUser),content, false )); //save PM
+
+        //Todo really send the PM
+
+        return true;
     }
 
-    public boolean sendPM(String userToSendToHim, String content, String sendingDateAndTime){
-        // content given by the protocol in already filtered
-        return false; //Todo implement this
+    public boolean sendPM(int connectionIdCurrUser,String userToSendToHim, String content, String sendingDateAndTime){ // content given by the protocol in already filtered
+        if (!usersById.containsKey(connectionIdCurrUser)|| (!usersById.get(connectionIdCurrUser).isloggedin()) || ! users.containsKey(userToSendToHim)) //curruser not register or not logged in or userToSendToHim not register
+            return false;
+        User currUser=usersById.get(connectionIdCurrUser);
+        if (currUser.isFollowingAfter(userToSendToHim)) // not Following
+            return false;
+        this.posts.add(new post(currUser,content, false )); //save PM
+        //Todo really send the PM
+        return true;
     }
 
     public HashMap<User, LogStatInfo> logStat(int connectionIdCurrUser){
-        if (!usersById.containsKey(connectionIdCurrUser)|| (!usersById.get(connectionIdCurrUser).isloggedin()))
+        if (!usersById.containsKey(connectionIdCurrUser)|| (!usersById.get(connectionIdCurrUser).isloggedin())) //curruser not register or not logged in
             return null;
         HashMap<User, LogStatInfo> mapToReturn=new HashMap<>();
 
-        for( Map.Entry name: users.entrySet()) //todo
+        for( Map.Entry name: users.entrySet()) //todo make sure its ok
         {
             User currUser = (User) name.getValue();
             mapToReturn.put(currUser,new LogStatInfo(currUser.getAge(),currUser.getNumPost(),currUser.getNumOfFollowers(),currUser.getNumOfFolloweing()));
@@ -121,17 +136,5 @@ public boolean register (String name, String code, String date){
         return true;
     }
 
-
-
-
-
-
-//    private boolean containName(String name) {
-//        for (User user: users) {
-//            if (user.getUsername().equals(name))
-//                return true;
-//        }
-//    return false;
-//    }
 
 }

@@ -58,7 +58,7 @@ public class PMMsg implements Message{
 
     @Override
     public void process(BgsDB db, Connections connections, int connectionId) {
-        boolean success= db.sendPM(this.getUsername(),this.getContent(),this.getSendingDateTime());
+        boolean success= db.sendPM(connectionId, this.getUsername(),this.getContent(),this.getSendingDateTime()); //added parameter
         if(success){
             connections.send(connectionId,new ACKMsg(this.getOptCode()));
         }
