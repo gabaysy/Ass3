@@ -8,6 +8,9 @@ public class MessageEncoderDecoder implements bgu.spl.net.api.MessageEncoderDeco
 
     @Override
     public byte[] encode(String message) {
+        if(message==null)
+            return null;
+        String[] strArr = message.split(" ");
 
         return new byte[0];
     }
