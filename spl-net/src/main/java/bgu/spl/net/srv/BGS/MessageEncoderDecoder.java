@@ -1,16 +1,17 @@
 package bgu.spl.net.srv.BGS;
 
-public class MessageEncoderDecoder implements bgu.spl.net.api.MessageEncoderDecoder<String> {
+import bgu.spl.net.srv.BGS.msg.Message;
+
+public class MessageEncoderDecoder implements bgu.spl.net.api.MessageEncoderDecoder<Message> {
     @Override
-    public String decodeNextByte(byte nextByte) {
+    public Message decodeNextByte(byte nextByte) {
         return null;
     }
 
     @Override
-    public byte[] encode(String message) {
+    public byte[] encode(Message message) {
         if(message==null)
             return null;
-        String[] strArr = message.split(" ");
 
         return new byte[0];
     }
