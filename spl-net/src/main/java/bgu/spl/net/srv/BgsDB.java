@@ -1,9 +1,11 @@
 package bgu.spl.net.srv;
 
 import bgu.spl.net.srv.BGS.msg.LogStatInfo;
+import bgu.spl.net.srv.BGS.msg.NotificationMsg;
 import bgu.spl.net.srv.bidi.post;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -24,7 +26,7 @@ public class BgsDB {
 public boolean register (String name, String code, String date,int connectionId){ // todo put in usersById
     if(users.containsKey(name))
             return false;
-        User userToAdd= new User(name , code , date);
+        User userToAdd= new User(name , code , date, connectionId);
         users.putIfAbsent(name,userToAdd);
         usersById.putIfAbsent(connectionId, userToAdd);
         return true;
@@ -37,13 +39,17 @@ public boolean register (String name, String code, String date,int connectionId)
         return true;
     }
 
-
-    public boolean logout(String name){
-        if (! users.containsKey(name)  ||! users.get(name).isloggedin())  // not register/not  logging
-            return false;
-        users.get(name).logout();
-        return true;
+    public NotificationMsg nextUnseenNotification(int connectionIdCurrUser){
+                return this.usersById.get(connectionIdCurrUser).getNextUnseenNotification();
     }
+
+
+//    public boolean logout(String name){
+//        if (! users.containsKey(name)  ||! users.get(name).isloggedin())  // not register/not  logging
+//            return false;
+//        users.get(name).logout();
+//        return true;
+//    }
 
     public boolean logout(int connectionIdCurrUser){
         if (!usersById.containsKey(connectionIdCurrUser))
@@ -136,5 +142,39 @@ public boolean register (String name, String code, String date,int connectionId)
         return true;
     }
 
+    //Yael added:
+    public int getUserIDByName(String username){
+        return this.users.get(username).getConnectionID();
+    }
+
+    public String getUsernameByConnectionID(int connectionID){
+        return this.usersById.get(connectionID).getUsername();
+    }
+
+    public LinkedList<Integer> IDsToSendNotificationDueToFollow(int senderConnectionID){
+        //todo implement this- returns a list of id's that need to get notifications
+        return null;
+    }
+
+    public LinkedList<Integer> IDsToSendNotificationDueToTag(String content){
+        //todo implement this- returns a list of id's that need to get notifications
+        return null;
+    }
+    //for notifications
+    public boolean isUserLoggedInByUsername(String username){
+        return this.users.get(username).isloggedin();
+    }
+
+    public boolean isUserLoggedInByID(int userID){
+        return this.usersById.get(userID).isloggedin();
+    }
+
+    public void addUnseenNotification(String username, NotificationMsg msg){
+        this.users.get(username).addUnseenNotification(msg);
+    }
+
+    public void addUnseenNotification(int userID, NotificationMsg msg){
+        this.usersById.get(userID).addUnseenNotification(msg);
+    }
 
 }

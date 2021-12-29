@@ -59,12 +59,11 @@ public class RegisterMsg implements Message{
     @Override
     public void process(BgsDB db, Connections connections, int connectionId) {
         boolean success= db.register(this.getUsername(),this.getPassword(), this.getBirthday(),connectionId );
-        if(success){
-            connections.send(connectionId,new ACKMsg(this.getOptCode()));
-        }
-        else{
-            connections.send(connectionId,new ErrorMsg(this.getOptCode()));
-        }
-
+        //response- ACK or error msg
+        Message messageToReturn=
+                success ?
+                new ACKMsg(this.getOptCode()) :
+                new ErrorMsg(this.getOptCode());
+        connections.send(connectionId,messageToReturn);
     }
 }

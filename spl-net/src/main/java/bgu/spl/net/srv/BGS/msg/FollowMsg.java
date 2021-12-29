@@ -34,14 +34,16 @@ public class FollowMsg implements Message{
 
     @Override
     public void process(BgsDB db, Connections connections, int connectionId) {
-        boolean success= this.getFollow_unfollow()==Follow_Unfollow.FOLLOW ?
-                db.follow(connectionId, this.getUsername())
-                : db.unFollow(connectionId, this.getUsername());
-        if(success){
-            connections.send(connectionId,new ACKMsg(this.getOptCode(), this.getUsername()));
-        }
-        else
-            connections.send(connectionId,new ErrorMsg(this.getOptCode()));
+        boolean success =
+                this.getFollow_unfollow() == Follow_Unfollow.FOLLOW ?
+                db.follow(connectionId, this.getUsername()) :
+                db.unFollow(connectionId, this.getUsername());
+        //response- ACK or error msg
+        Message messageToReturn =
+                success ?
+                new ACKMsg(this.getOptCode(), this.getUsername()) :
+                new ErrorMsg(this.getOptCode());
+        connections.send(connectionId, messageToReturn);
     }
 }
 

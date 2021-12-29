@@ -20,12 +20,12 @@ public class LogstatMsg implements Message{
     @Override
     public void process(BgsDB db, Connections connections, int connectionId) {
         HashMap<User, LogStatInfo> logStatsInfo= db.logStat(connectionId);// added parameter
-        if(logStatsInfo!=null){
+        if(logStatsInfo!=null){ //success
             for (LogStatInfo curr: logStatsInfo.values()) {//Todo make sure .values gets all values
                 connections.send(connectionId,new ACKMsg(this.getOptCode(),curr.toString()));
             }
         }
-        else
+        else //not success
             connections.send(connectionId,new ErrorMsg(this.getOptCode()));
     }
 }

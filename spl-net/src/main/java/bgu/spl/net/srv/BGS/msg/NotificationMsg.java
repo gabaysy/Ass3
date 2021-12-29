@@ -9,7 +9,6 @@ public class NotificationMsg implements Message{
     final String postingUser;
     final String content;
 
-
     enum PM_Public{
         PM,
         PUBLIC
@@ -18,7 +17,10 @@ public class NotificationMsg implements Message{
     public NotificationMsg(byte pmOrPublic, String postingUser, String content) {
         this.optCode = 9;
         // Todo need to validate byte?
-        this.pmOrPublic = pmOrPublic == 0 ? PM_Public.PM : PM_Public.PUBLIC; //Todo compare byte with == ?;
+        this.pmOrPublic =
+                pmOrPublic == 0 ?
+                PM_Public.PM :
+                PM_Public.PUBLIC;
         this.postingUser = postingUser;
         this.content = content;
     }
@@ -45,7 +47,7 @@ public class NotificationMsg implements Message{
     }
 
     public String toString(){
-        //Todo Implement this
+        //Todo Implement this ?
         return "";
     }
 }

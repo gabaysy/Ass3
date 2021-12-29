@@ -1,7 +1,11 @@
 package bgu.spl.net.srv;
 
+import bgu.spl.net.srv.BGS.msg.NotificationMsg;
+
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class User {
@@ -13,39 +17,46 @@ public class User {
     private List<User> followers;
     private List<User> followings;
     private List<User> blocked;//
+    private int connectionID;
 
     private int age;
     private int NumPost;
-    private boolean loggedin;
-  //  private AtomicBoolean loggedin; //use Atomic?
+    //   private boolean loggedin;
+    private AtomicBoolean loggedin; //use Atomic?
 
+    private ConcurrentLinkedDeque<NotificationMsg> unSeenNotifications;
 
-
-    public User(String name, String code, String date ){
+    public User(String name, String code, String date, int connectionID ){
         this.username=name;
         this.password=code;
         this.birthday=date;
         this.followers=new LinkedList<>() ;
         this.followings=new LinkedList<>() ;
         this.blocked=new LinkedList<>();
-        this.loggedin=false;
+        this.loggedin=new AtomicBoolean(false);
+        this.connectionID=connectionID;
+        this.unSeenNotifications=new ConcurrentLinkedDeque<NotificationMsg>();
     }
 
     public boolean login(){
-        if (loggedin)
-            return false;
-        loggedin=true;
-        return true;
+        return loggedin.compareAndSet(false,true);
+//        if (loggedin)
+//            return false;
+//        loggedin=true;
+//        return true;
     }
 
     public boolean logout(){
-        if (!loggedin)
-            return false;
-        loggedin=false;
-        return false;
+        return loggedin.compareAndSet(true, false);
+//        if (!loggedin)
+//            return false;
+//        loggedin=false;
+//        return false;
     }
 
-
+    public int getConnectionID() {
+        return connectionID;
+    }
 
     public String getPassword() {
         return password;
@@ -88,7 +99,7 @@ public class User {
 
 
     public boolean isloggedin() {
-        return loggedin;
+        return loggedin.get();
     }
 
     public boolean isFollowingAfter(String name) {
@@ -97,11 +108,11 @@ public class User {
     }
 
     public boolean follow(User usernameToFollow) {
-       if ( isFollowingAfter(usernameToFollow.getUsername()) )
-           return false;
-       this.followings.add(usernameToFollow);
+        if ( isFollowingAfter(usernameToFollow.getUsername()) )
+            return false;
+        this.followings.add(usernameToFollow);
         usernameToFollow.followers.add(this);
-       return true;
+        return true;
     }
 
     public boolean unfollow(User usernameToUnFollow) {
@@ -117,8 +128,9 @@ public class User {
     public void addToBlocked(User userToBlock) {
         this.blocked.add(userToBlock);
     }
+
     public boolean isBlocked(User userToCheck) {
-       return (this.blocked.contains(userToCheck));
+        return (this.blocked.contains(userToCheck));
     }
 
     public  int getNumOfFollowers(){
@@ -129,5 +141,18 @@ public class User {
         return this.followings.size();
     }
 
+//    public ConcurrentLinkedDeque<NotificationMsg> getUnSeenNotifications() {
+//        return unSeenNotifications;
+//    }
 
+    public void addUnseenNotification(NotificationMsg msg){
+        this.unSeenNotifications.add(msg);
+    }
+
+    public NotificationMsg getNextUnseenNotification(){
+        if(unSeenNotifications.isEmpty()){
+            return null;
+        }
+        return this.unSeenNotifications.poll();
+    }
 }

@@ -19,7 +19,7 @@ public class ErrorMsg implements Message{
 
     }
     public String toString(){
-        //Todo Implement this
+        //Todo Implement this ?
         return "";
     }
 }

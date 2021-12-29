@@ -35,13 +35,25 @@ public class LoginMsg implements Message{
 
     @Override
     public void process(BgsDB db, Connections connections, int connectionId) {
-        if(this.getCaptcha()==0){ //todo byte with ==
+        if(this.getCaptcha()==0){
             connections.send(connectionId, new ErrorMsg(this.getOptCode()));
             return;
         }
         boolean success=db.logIn(this.getUsername(),this.getPassword());
-        if(!success){
-            connections.send(connectionId, new ErrorMsg(this.getOptCode()));
+        //response- ACK or error msg
+        Message messageToReturn=
+                success ?
+                new ACKMsg(this.getOptCode()) :
+                new ErrorMsg(this.getOptCode());
+        connections.send(connectionId,messageToReturn);
+
+        //send unseen notifications
+        if(success){
+            NotificationMsg msg=db.nextUnseenNotification(connectionId);
+            while (msg!=null){
+                connections.send(connectionId,msg);
+                msg=db.nextUnseenNotification(connectionId);
+            }
         }
     }
 }

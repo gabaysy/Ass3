@@ -3,6 +3,8 @@ import bgu.spl.net.api.bidi.Connections;
 import bgu.spl.net.srv.BGS.FilteredWords;
 import bgu.spl.net.srv.BgsDB;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Set;
 
 public class PMMsg implements Message{
@@ -16,11 +18,7 @@ public class PMMsg implements Message{
         this.optCode = 6;
         this.username = username;
         this.content=filterContent(content);
-        this.sendingDateTime="00"; //Todo put time
-//        if(isDateTimeValid(sendingDateTime)) //Todo need to validate?
-//            this.sendingDateTime=sendingDateTime;
-//        else
-//            this.sendingDateTime="00-00-0000 00:00";
+        this.sendingDateTime=new SimpleDateFormat("dd:MM:yyyy HH:mm").format(new Date());
     }
 
     public short getOptCode() {
@@ -40,11 +38,6 @@ public class PMMsg implements Message{
         return sendingDateTime;
     }
 
-
-    private boolean isDateTimeValid(String sendingDateTime){ //Todo
-        return true;
-    }
-
     private String filterContent(String content){
         String filterContent=content;
         Set<String> wordsToFilter=FilteredWords.wordsToFilter();
@@ -58,12 +51,26 @@ public class PMMsg implements Message{
 
     @Override
     public void process(BgsDB db, Connections connections, int connectionId) {
-        boolean success= db.sendPM(connectionId, this.getUsername(),this.getContent(),this.getSendingDateTime()); //added parameter
-        if(success){
-            connections.send(connectionId,new ACKMsg(this.getOptCode()));
+        boolean success = db.sendPM(connectionId, this.getUsername(), this.getContent(), this.getSendingDateTime()); //added parameter
+        //response- ACK or Error
+        Message messageToReturn =
+                success ?
+                        new ACKMsg(this.getOptCode()) :
+                        new ErrorMsg(this.getOptCode());
+        connections.send(connectionId, messageToReturn);
+
+        //notification
+        int userToSendNotification=db.getUserIDByName(username);
+        NotificationMsg msgToSend=new NotificationMsg(
+                (byte) 0, //PM
+                db.getUsernameByConnectionID(connectionId), //posting user = this user
+                this.getContent()); //content
+        if(db.isUserLoggedInByUsername(username)){
+            connections.send(userToSendNotification,msgToSend);
         }
-        else
-            connections.send(connectionId,new ErrorMsg(this.getOptCode()));
+        else {
+            db.addUnseenNotification(username,msgToSend);
+        }
     }
 }
 
