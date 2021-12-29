@@ -11,22 +11,22 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class BgsDB {
     private ConcurrentHashMap<String, User> users;
-    private int nextId;
     private ConcurrentHashMap<Integer, User> usersById;
     private ConcurrentLinkedQueue<post> posts;
 
     public BgsDB (){
         this.users=new ConcurrentHashMap();
-        this.nextId=1;
         this.posts=new ConcurrentLinkedQueue<post>();
     }
 
 
 
-public boolean register (String name, String code, String date){ // todo put in usersById
+public boolean register (String name, String code, String date,int connectionId){ // todo put in usersById
     if(users.containsKey(name))
             return false;
-        users.putIfAbsent(name,new User(name , code , date));
+        User userToAdd= new User(name , code , date);
+        users.putIfAbsent(name,userToAdd);
+        usersById.putIfAbsent(connectionId, userToAdd);
         return true;
 }
 

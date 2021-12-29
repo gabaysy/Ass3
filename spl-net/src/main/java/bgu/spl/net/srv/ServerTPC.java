@@ -12,6 +12,7 @@ public class ServerTPC extends BaseServer {
     @Override
     protected void execute(BlockingConnectionHandler handler) {
         Thread t= new Thread(handler);
+        t.start();
 
     }
 }
