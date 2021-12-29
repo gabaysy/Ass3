@@ -58,7 +58,7 @@ public class RegisterMsg implements Message{
 
     @Override
     public void process(BgsDB db, Connections connections, int connectionId) {
-        boolean success= db.register(this.getUsername(),this.getPassword(), this.getBirthday());
+        boolean success= db.register(this.getUsername(),this.getPassword(), this.getBirthday(),connectionId );
         if(success){
             connections.send(connectionId,new ACKMsg(this.getOptCode()));
         }

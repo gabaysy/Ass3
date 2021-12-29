@@ -19,8 +19,9 @@ public class BidiMessagingProtocolImpl<T> implements BidiMessagingProtocol {
 
 
     @Override
-    public void start(int connectionId, Connections connections) {
-        //Todo Implement this
+    public void start(int _connectionId, Connections _connections) {
+        this.connectionId=_connectionId;
+        this.connections=_connections;
     }
 
     @Override

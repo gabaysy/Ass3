@@ -19,10 +19,11 @@ public class BlockingConnectionHandler<T> implements Runnable, ConnectionHandler
     private BufferedOutputStream out;
     private volatile boolean connected = true;
 
-    public BlockingConnectionHandler(Socket sock, MessageEncoderDecoder<T> reader, BidiMessagingProtocol<T> protocol) {
+    public BlockingConnectionHandler( Socket sock, MessageEncoderDecoder<T> reader, BidiMessagingProtocol<T> protocol) {
         this.sock = sock;
         this.encdec = reader;
         this.protocol = protocol;
+
     }
 
     @Override
