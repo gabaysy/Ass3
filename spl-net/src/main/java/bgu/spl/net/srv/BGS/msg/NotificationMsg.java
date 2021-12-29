@@ -43,4 +43,9 @@ public class NotificationMsg implements Message{
     public void process(BgsDB db, Connections connections, int connectionId) {
         //not implemented- relevant to server-to-client only
     }
+
+    public String toString(){
+        //Todo Implement this
+        return "";
+    }
 }

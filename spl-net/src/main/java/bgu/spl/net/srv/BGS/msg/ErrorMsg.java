@@ -18,4 +18,8 @@ public class ErrorMsg implements Message{
         //not implemented- relevant to server-to-client only
 
     }
+    public String toString(){
+        //Todo Implement this
+        return "";
+    }
 }
