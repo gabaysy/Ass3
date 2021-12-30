@@ -110,16 +110,20 @@ public class User {
     public boolean follow(User usernameToFollow) {
         if ( isFollowingAfter(usernameToFollow.getUsername()) )
             return false;
-        this.followings.add(usernameToFollow);
-        usernameToFollow.followers.add(this);
+        synchronized (this.followings){
+        this.followings.add(usernameToFollow);}
+        synchronized ( usernameToFollow.followers){
+        usernameToFollow.followers.add(this);}
         return true;
     }
 
     public boolean unfollow(User usernameToUnFollow) {
         if ( !isFollowingAfter(usernameToUnFollow.getUsername()) )
             return false;
-        this.followings.remove(usernameToUnFollow);
-        usernameToUnFollow.followers.remove(this);
+        synchronized(this.followings){
+        this.followings.remove(usernameToUnFollow);}
+        synchronized(usernameToUnFollow.followers){
+        usernameToUnFollow.followers.remove(this);}
         return true;
 
     }

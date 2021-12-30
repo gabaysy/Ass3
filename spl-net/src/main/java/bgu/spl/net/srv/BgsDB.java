@@ -23,7 +23,7 @@ public class BgsDB {
 
 
 
-public boolean register (String name, String code, String date,int connectionId){ // todo put in usersById
+public boolean register (String name, String code, String date,int connectionId){
     if(users.containsKey(name))
             return false;
         User userToAdd= new User(name , code , date, connectionId);
