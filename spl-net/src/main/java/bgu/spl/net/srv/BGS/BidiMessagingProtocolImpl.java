@@ -28,6 +28,10 @@ public class BidiMessagingProtocolImpl<T> implements BidiMessagingProtocol {
     public void process(Object message) {
         Message msgToProcess=(Message)message;
         msgToProcess.process(db, connections , connectionId);
+        if(msgToProcess.getOptCode()==3) {
+            shouldTerminate = true;
+            connections.disconnect(connectionId);
+        }
     }
 
     @Override
