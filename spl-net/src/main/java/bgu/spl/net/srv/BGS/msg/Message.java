@@ -5,4 +5,5 @@ import bgu.spl.net.srv.BgsDB;
 
 public interface Message {
     public void process(BgsDB db, Connections connections, int connectionId);
+    public short getOptCode();
 }

@@ -22,7 +22,7 @@ public class ACKMsg implements Message{
         this.additionalData = Optional.of(additionalData);
     }
 
-    public short getOptcode() {
+    public short getOptCode() {
         return optcode;
     }
 
@@ -40,7 +40,7 @@ public class ACKMsg implements Message{
     }
 
     public String toString(){
-        String ans= this.getOptcode() +" "+ this.getMessageOptcode();
+        String ans= this.getOptCode() +" "+ this.getMessageOptcode();
         if(this.additionalData.isPresent())
             ans+=" "+additionalData.get();
         return ans;

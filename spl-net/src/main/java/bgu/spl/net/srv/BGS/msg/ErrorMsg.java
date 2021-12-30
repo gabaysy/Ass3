@@ -18,6 +18,12 @@ public class ErrorMsg implements Message{
         //not implemented- relevant to server-to-client only
 
     }
+
+    @Override
+    public short getOptCode() {
+        return this.optcode;
+    }
+
     public String toString(){
         //Todo Implement this ?
         return "";
