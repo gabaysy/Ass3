@@ -159,4 +159,8 @@ public class User {
         }
         return this.unSeenNotifications.poll();
     }
+
+    public void setNewConnectionId(int newConnectionId) {
+        this.connectionID=newConnectionId;
+    }
 }

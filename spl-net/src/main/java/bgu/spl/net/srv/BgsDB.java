@@ -18,6 +18,7 @@ public class BgsDB {
 
     public BgsDB (){
         this.users=new ConcurrentHashMap();
+        this.usersById=new ConcurrentHashMap();
         this.posts=new ConcurrentLinkedQueue<post>();
     }
 
@@ -32,11 +33,20 @@ public boolean register (String name, String code, String date,int connectionId)
         return true;
 }
 
-    public boolean logIn(String name, String code){
+    public boolean logIn(String name, String code,int connectionId){
         if (! users.containsKey(name) ||(! code.equals(users.get(name).getPassword()) ) ||users.get(name).isloggedin())  // not register/Password doest match/ already logging
             return false;
         users.get(name).login();
+        if (users.get(name).getConnectionID()!=connectionId)
+            changeConnectionIdInList(connectionId,name);
         return true;
+    }
+
+    private void changeConnectionIdInList(int newConnectionId ,String name) {
+       User user= users.get(name);
+       usersById.remove(user.getConnectionID());
+        usersById.put(newConnectionId,user);
+        user.setNewConnectionId(newConnectionId);
     }
 
     public NotificationMsg nextUnseenNotification(int connectionIdCurrUser){

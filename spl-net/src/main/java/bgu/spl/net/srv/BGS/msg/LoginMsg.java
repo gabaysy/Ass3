@@ -39,7 +39,7 @@ public class LoginMsg implements Message{
             connections.send(connectionId, new ErrorMsg(this.getOptCode()));
             return;
         }
-        boolean success=db.logIn(this.getUsername(),this.getPassword());
+        boolean success=db.logIn(this.getUsername(),this.getPassword(),connectionId);
         //response- ACK or error msg
         Message messageToReturn=
                 success ?
