@@ -30,9 +30,9 @@ public class MessageEncoderDecoder implements bgu.spl.net.api.MessageEncoderDeco
                 byte[] optCode_9 = shortToBytes(notif.getOptCode());
                 byte[] pm_or_post_9 = shortToBytes(notif.getPM_PublicInShort());
                 byte[] postingUser_9 = notif.getPostingUser().getBytes(StandardCharsets.UTF_8);
-                byte[] zero_9 = shortToBytes((short) 0);
+                byte[] zero_9 = shortToBytes((byte) 0);
                 byte[] content_9 = notif.getContent().getBytes(StandardCharsets.UTF_8);
-                byte[] second_zero_9 = shortToBytes((short) 0);
+                byte[] second_zero_9 = shortToBytes((byte) 0);
 
                 int len = optCode_9.length+
                         pm_or_post_9.length+
