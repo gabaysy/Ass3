@@ -57,7 +57,9 @@ public class User {
     public int getConnectionID() {
         return connectionID;
     }
-
+    public List<User> getfollowers() {
+        return followers;
+    }
     public String getPassword() {
         return password;
     }

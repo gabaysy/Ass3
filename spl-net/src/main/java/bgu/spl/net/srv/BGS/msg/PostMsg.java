@@ -33,20 +33,35 @@ public class PostMsg implements Message {
                         new ErrorMsg(this.getOptCode());
         connections.send(connectionId, messageToReturn);
 
-        //notification to users who follow me
-        LinkedList<Integer> IDsToSendNotificationDueToFollow=db.IDsToSendNotificationDueToFollow(connectionId);
-        for (int currID: IDsToSendNotificationDueToFollow) {
+        //notification to users who follow me  todo- YAEL -see if its OK for you
+        LinkedList<User> usersToSendNotificationDueToFollow=db.usersToSendNotificationDueToFollow(connectionId);
+        for (User currUser: usersToSendNotificationDueToFollow) {
             NotificationMsg msgToSend= new NotificationMsg(
                     (byte) 1, //Public
                     db.getUsernameByConnectionID(connectionId), //posting user = this user
                     this.getContent()); //content
-            if(db.isUserLoggedInByID(currID)) {
-                connections.send(currID, msgToSend); //content
+            if(currUser.isloggedin()) {
+                connections.send(currUser.getConnectionID(), msgToSend); //content
             }
             else {
-                db.addUnseenNotification(currID,msgToSend);
+                db.addUnseenNotification(currUser.getUsername(),msgToSend);
             }
         }
+
+//        //notification to users who follow me
+//        LinkedList<Integer> IDsToSendNotificationDueToFollow=db.IDsToSendNotificationDueToFollow(connectionId);
+//        for (int currID: IDsToSendNotificationDueToFollow) {
+//            NotificationMsg msgToSend= new NotificationMsg(
+//                    (byte) 1, //Public
+//                    db.getUsernameByConnectionID(connectionId), //posting user = this user
+//                    this.getContent()); //content
+//            if(db.isUserLoggedInByID(currID)) {
+//                connections.send(currID, msgToSend); //content
+//            }
+//            else {
+//                db.addUnseenNotification(currID,msgToSend);
+//            }
+//        }
 
         //notification to users I tagged
         LinkedList<Integer> IDsToSendNotificationDueToTag=db.IDsToSendNotificationDueToTag(this.content);

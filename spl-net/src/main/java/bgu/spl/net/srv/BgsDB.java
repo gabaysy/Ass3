@@ -168,6 +168,14 @@ public boolean register (String name, String code, String date,int connectionId)
         return null;
     }
 
+    public LinkedList<User> usersToSendNotificationDueToFollow(int senderConnectionID){
+        LinkedList followersList =new LinkedList<User>();
+        for (User curUser : usersById.get(senderConnectionID).getfollowers() )
+            followersList.add(curUser.getUsername());
+        return followersList;
+    }
+
+
     public LinkedList<Integer> IDsToSendNotificationDueToTag(String content){
         //todo implement this- returns a list of id's that need to get notifications
         return null;
