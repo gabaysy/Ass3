@@ -38,11 +38,11 @@ public boolean register (String name, String code, String date,int connectionId)
             return false;
         users.get(name).login();
         if (users.get(name).getConnectionID()!=connectionId)
-            changeConnectionIdInList(connectionId,name);
+            changeConnectionIdInListAndUser(connectionId,name);
         return true;
     }
 
-    private void changeConnectionIdInList(int newConnectionId ,String name) {
+    private void changeConnectionIdInListAndUser(int newConnectionId ,String name) {
        User user= users.get(name);
        usersById.remove(user.getConnectionID());
         usersById.put(newConnectionId,user);
@@ -68,6 +68,8 @@ public boolean register (String name, String code, String date,int connectionId)
         if (!user.isloggedin())
             return false;
         user.logout();
+        usersById.remove(connectionIdCurrUser);
+        user.setNewConnectionId(-1);
         return true;
     }
 

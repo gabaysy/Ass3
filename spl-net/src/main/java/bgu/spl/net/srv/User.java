@@ -17,7 +17,7 @@ public class User {
     private List<User> followers;
     private List<User> followings;
     private List<User> blocked;//
-    private int connectionID;
+    private Integer connectionID;
 
     private int age;
     private int NumPost;
@@ -161,6 +161,7 @@ public class User {
     }
 
     public void setNewConnectionId(int newConnectionId) {
-        this.connectionID=newConnectionId;
+        synchronized (this.connectionID){
+        this.connectionID=newConnectionId;}
     }
 }
