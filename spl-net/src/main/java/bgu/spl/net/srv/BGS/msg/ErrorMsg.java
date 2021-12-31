@@ -19,6 +19,10 @@ public class ErrorMsg implements Message{
 
     }
 
+    public short getMessageOptcode() {
+        return messageOptcode;
+    }
+
     @Override
     public short getOptCode() {
         return this.optcode;

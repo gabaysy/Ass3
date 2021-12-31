@@ -5,6 +5,7 @@ import bgu.spl.net.srv.BgsDB;
 
 public class NotificationMsg implements Message{
     final short optCode;
+    final short PM_PublicInShort;
     final PM_Public pmOrPublic;
     final String postingUser;
     final String content;
@@ -23,6 +24,7 @@ public class NotificationMsg implements Message{
                 PM_Public.PUBLIC;
         this.postingUser = postingUser;
         this.content = content;
+        this.PM_PublicInShort=pmOrPublic;
     }
 
     public short getOptCode() {
@@ -49,5 +51,9 @@ public class NotificationMsg implements Message{
     public String toString(){
         //Todo Implement this ?
         return "";
+    }
+
+    public short getPM_PublicInShort() {
+        return PM_PublicInShort;
     }
 }

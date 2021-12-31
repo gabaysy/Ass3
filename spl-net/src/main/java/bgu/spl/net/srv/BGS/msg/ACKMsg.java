@@ -29,7 +29,9 @@ public class ACKMsg implements Message{
     public short getMessageOptcode() {
         return messageOptcode;
     }
-
+    public boolean hasData(){
+        return this.additionalData.isPresent();
+    }
     public String getAdditionalData() {
         return additionalData.get();
     }
