@@ -94,7 +94,7 @@ public boolean register (String name, String code, String date,int connectionId)
     public boolean post(int connectionIdCurrUser, String content){ // cant assume  @ only for users
         if (!usersById.containsKey(connectionIdCurrUser)|| (!usersById.get(connectionIdCurrUser).isloggedin())) //curruser not register or not logged in
             return false;
-        this.posts.add(new post(usersById.get(connectionIdCurrUser),content, false )); //save PM
+        this.posts.add(new post(usersById.get(connectionIdCurrUser),content, null )); //save PM
 
         //Todo really send the PM
 
@@ -107,7 +107,7 @@ public boolean register (String name, String code, String date,int connectionId)
         User currUser=usersById.get(connectionIdCurrUser);
         if (currUser.isFollowingAfter(userToSendToHim)) // not Following
             return false;
-        this.posts.add(new post(currUser,content, false )); //save PM
+        this.posts.add(new post(currUser,content, users.get(userToSendToHim) )); //save PM
         //Todo really send the PM
         return true;
     }
