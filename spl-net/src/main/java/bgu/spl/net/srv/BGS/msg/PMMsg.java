@@ -15,11 +15,12 @@ public class PMMsg implements Message{
     final String sendingDateTime;
 
 
-    public PMMsg(String username, String content) {
+    public PMMsg(String username, String content, String sendingDateTime) {
         this.optCode = 6;
         this.username = username;
         this.content=filterContent(content);
-        this.sendingDateTime=new SimpleDateFormat("dd:MM:yyyy HH:mm").format(new Date());
+        this.sendingDateTime= sendingDateTime;
+      //this.sendingDateTime=new SimpleDateFormat("dd:MM:yyyy HH:mm").format(new Date());
     }
 
     public short getOptCode() {

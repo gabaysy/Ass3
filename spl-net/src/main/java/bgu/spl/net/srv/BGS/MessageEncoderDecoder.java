@@ -1,21 +1,274 @@
 package bgu.spl.net.srv.BGS;
-
-import bgu.spl.net.srv.BGS.msg.ACKMsg;
-import bgu.spl.net.srv.BGS.msg.ErrorMsg;
-import bgu.spl.net.srv.BGS.msg.Message;
-import bgu.spl.net.srv.BGS.msg.NotificationMsg;
-import com.sun.tools.javac.util.ArrayUtils;
+import bgu.spl.net.srv.BGS.msg.*;
 
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
-import java.util.stream.Stream;
+
 
 public class MessageEncoderDecoder implements bgu.spl.net.api.MessageEncoderDecoder<Message> {
+
+    private byte[] bytes = new byte[1 << 10]; //start with 1k
+    private int len = 0;
+
     @Override
     public Message decodeNextByte(byte nextByte) {
+        if (nextByte == ';') { //Todo check comparison
+            return decodeEntireString(bytes);
+        }
+        pushByte(nextByte);
+        return null; //not a line yet
+    }
+
+    public Message decodeEntireString(byte[] bytes) {
+        int optCode = bytesToShort(new byte[]{bytes[0], bytes[1]});
+        switch (optCode) {
+            case 1:
+                return decReg(bytes);
+            case 2:
+                return decLogin(bytes);
+            case 3:
+                return decLogout(bytes);
+            case 4:
+                return decFollow(bytes);
+            case 5:
+                return decPost(bytes);
+            case 6:
+                return decPM(bytes);
+            case 7:
+                return decLogstat(bytes);
+            case 8:
+                return decStat(bytes);
+            case 12:
+                return decBlock(bytes);
+        }
         return null;
     }
+
+    private Message decReg(byte[] bytes) {
+        int currIndex = 2;
+        int usernameLen = 0;
+        int userIndex=0;
+        byte [] username = new byte[bytes.length];
+
+        //username
+        while(bytes[currIndex]!='\0') {
+            username[userIndex]=bytes[currIndex];
+            usernameLen++;
+            userIndex++;
+            currIndex++;
+        }
+        String _username= new String(username, 0, usernameLen, StandardCharsets.UTF_8);
+
+        //password
+        currIndex++;
+        int passIndex=0;
+        int passLen = 0;
+        byte [] password = new byte[bytes.length-usernameLen];
+        while(bytes[currIndex]!='\0') {
+            password[passIndex]=bytes[currIndex];
+            passIndex++;
+            passLen++;
+            currIndex++;
+        }
+        String _password= new String(username, 0, passLen, StandardCharsets.UTF_8);
+
+        //birthday
+        currIndex++;
+        int birthIndex=0;
+        int birthLen = 0;
+        byte [] birthday = new byte[bytes.length-usernameLen-passLen];
+        while(bytes[currIndex]!='\0') {
+            birthday[birthIndex]=bytes[currIndex];
+            birthIndex++;
+            birthLen++;
+            currIndex++;
+        }
+        String _birthday= new String(username, 0, birthLen, StandardCharsets.UTF_8);
+
+        return new RegisterMsg(_username,_password,_birthday);
+    }
+
+
+    private Message decLogin(byte[] bytes) {
+        int currIndex = 2;
+        int usernameLen = 0;
+        int userIndex=0;
+        byte [] username = new byte[bytes.length];
+
+        //username
+        while(bytes[currIndex]!='\0') {
+            username[userIndex]=bytes[currIndex];
+            usernameLen++;
+            userIndex++;
+            currIndex++;
+        }
+        String _username= new String(username, 0, usernameLen, StandardCharsets.UTF_8);
+
+        //password
+        currIndex++;
+        int passIndex=0;
+        int passLen = 0;
+        byte [] password = new byte[bytes.length-usernameLen];
+        while(bytes[currIndex]!='\0') {
+            password[passIndex]=bytes[currIndex];
+            passIndex++;
+            passLen++;
+            currIndex++;
+        }
+        String _password= new String(username, 0, passLen, StandardCharsets.UTF_8);
+
+        //captcha
+        byte captcha=bytes[bytes.length-1];
+
+        if(captcha!=bytes[currIndex++]) { //debug
+            System.out.println("Problem");
+        }
+
+        return new LoginMsg(_username,_password,captcha);
+    }
+
+    private Message decLogout(byte[] bytes) {
+        return new LogoutMsg();
+    }
+
+    private Message decFollow(byte[] bytes) {
+        //follow or unfollow
+        byte foll_unFoll=bytes[2];
+        //username
+        int currIndex=3;
+        int userIndex=0;
+        int userLen=0;
+        byte [] username = new byte[bytes.length-3];
+        while(currIndex<bytes.length) {
+            username[userIndex]=bytes[currIndex];
+            userIndex++;
+            currIndex++;
+            userLen++;
+        }
+        String _username= new String(username, 0, userLen, StandardCharsets.UTF_8);
+
+        return new FollowMsg(foll_unFoll, _username);
+    }
+
+    private Message decPost(byte[] bytes) {
+        //content
+        int currIndex=2;
+        int contentIndex=0;
+        int contentLen=0;
+        byte [] content = new byte[bytes.length-2];
+        while(bytes[currIndex]!='\0') {
+            content[contentIndex]=bytes[currIndex];
+            contentIndex++;
+            currIndex++;
+            contentLen++;
+        }
+
+        String _content= new String(content, 0, contentLen, StandardCharsets.UTF_8);
+
+        return new PostMsg(_content);
+    }
+
+    private Message decPM(byte[] bytes) {
+        int currIndex = 2;
+        int usernameLen = 0;
+        int userIndex=0;
+        byte [] username = new byte[bytes.length];
+
+        //username
+        while(bytes[currIndex]!='\0') {
+            username[userIndex]=bytes[currIndex];
+            usernameLen++;
+            userIndex++;
+            currIndex++;
+        }
+        String _username= new String(username, 0, usernameLen, StandardCharsets.UTF_8);
+
+        //content
+        currIndex++;
+        int contentIndex=0;
+        int contentLen = 0;
+        byte [] content = new byte[bytes.length-usernameLen];
+        while(bytes[currIndex]!='\0') {
+            content[contentIndex]=bytes[currIndex];
+            contentIndex++;
+            contentLen++;
+            currIndex++;
+        }
+        String _content= new String(username, 0, contentLen, StandardCharsets.UTF_8);
+
+        //sending time
+        currIndex++;
+        int sendingTimeIndex=0;
+        int sendingTimeLen = 0;
+        byte [] sendingTime = new byte[bytes.length-usernameLen-contentLen];
+        while(bytes[currIndex]!='\0') {
+            sendingTime[sendingTimeIndex]=bytes[currIndex];
+            sendingTimeIndex++;
+            sendingTimeLen++;
+            currIndex++;
+        }
+        String _sendingTime= new String(username, 0, sendingTimeLen, StandardCharsets.UTF_8);
+
+        return new PMMsg(_username,_content,_sendingTime);
+    }
+
+
+    private Message decLogstat(byte[] bytes) {
+        return new LogstatMsg();
+    }
+
+
+    private Message decStat(byte[] bytes) {
+        //usernames list
+        int currIndex=2;
+        int usersIndex=0;
+        int usersLen=0;
+        byte [] usernames = new byte[bytes.length-2];
+        while(bytes[currIndex]!='\0') {
+            usernames[usersIndex]=bytes[currIndex];
+            usersIndex++;
+            currIndex++;
+            usersLen++;
+        }
+
+        String _usernames= new String(usernames, 0, usersLen, StandardCharsets.UTF_8);
+
+        return new StatMsg(_usernames);
+    }
+
+    private Message decBlock(byte[] bytes) {
+        //username
+        int currIndex=2;
+        int userIndex=0;
+        int userLen=0;
+        byte [] username = new byte[bytes.length-2];
+        while(bytes[currIndex]!='\0') {
+            username[userIndex]=bytes[currIndex];
+            userIndex++;
+            currIndex++;
+            userLen++;
+        }
+
+        String _username= new String(username, 0, userLen, StandardCharsets.UTF_8);
+        return new BlockMsg(_username);
+    }
+
+    private void pushByte(byte nextByte) {
+        if (len >= bytes.length) {
+            bytes = Arrays.copyOf(bytes, len * 2);
+        }
+        bytes[len++] = nextByte;
+    }
+
+    private String popString() {
+        //notice that we explicitly requesting that the string will be decoded from UTF-8
+        //this is not actually required as it is the default encoding in java.
+        String result = new String(bytes, 0, len, StandardCharsets.UTF_8);
+        len = 0;
+        return result;
+    }
+
 
     @Override
     public byte[] encode(Message message) {
@@ -102,5 +355,4 @@ public class MessageEncoderDecoder implements bgu.spl.net.api.MessageEncoderDeco
         result += (short)(byteArr[1] & 0xff);
         return result;
     }
-
 }
