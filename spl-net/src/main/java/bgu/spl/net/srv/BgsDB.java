@@ -154,18 +154,8 @@ public boolean register (String name, String code, String date,int connectionId)
         return true;
     }
 
-    //Yael added:
-    public int getUserIDByName(String username){
-        return this.users.get(username).getConnectionID();
-    }
-
     public String getUsernameByConnectionID(int connectionID){
         return this.usersById.get(connectionID).getUsername();
-    }
-
-    public LinkedList<Integer> IDsToSendNotificationDueToFollow(int senderConnectionID){
-        //todo implement this- returns a list of id's that need to get notifications
-        return null;
     }
 
     public LinkedList<User> usersToSendNotificationDueToFollow(int senderConnectionID){
@@ -176,25 +166,18 @@ public boolean register (String name, String code, String date,int connectionId)
     }
 
 
-    public LinkedList<Integer> IDsToSendNotificationDueToTag(String content){
-        //todo implement this- returns a list of id's that need to get notifications
+    public LinkedList<User> IDsToSendNotificationDueToTag(String content){
+        //todo implement this- returns a list of users that need to get notifications due to Tag
         return null;
     }
     //for notifications
-    public boolean isUserLoggedInByUsername(String username){
-        return this.users.get(username).isloggedin();
-    }
-
-    public boolean isUserLoggedInByID(int userID){
-        return this.usersById.get(userID).isloggedin();
-    }
 
     public void addUnseenNotification(String username, NotificationMsg msg){
         this.users.get(username).addUnseenNotification(msg);
     }
 
-    public void addUnseenNotification(int userID, NotificationMsg msg){
-        this.usersById.get(userID).addUnseenNotification(msg);
+    public User getUserByUsername(String username){
+        return this.users.get(username);
     }
 
 }

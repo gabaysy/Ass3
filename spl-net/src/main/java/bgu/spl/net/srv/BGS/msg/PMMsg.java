@@ -2,6 +2,7 @@ package bgu.spl.net.srv.BGS.msg;
 import bgu.spl.net.api.bidi.Connections;
 import bgu.spl.net.srv.BGS.FilteredWords;
 import bgu.spl.net.srv.BgsDB;
+import bgu.spl.net.srv.User;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -60,16 +61,16 @@ public class PMMsg implements Message{
         connections.send(connectionId, messageToReturn);
 
         //notification
-        int userToSendNotification=db.getUserIDByName(username);
+        User userToSendNotification=db.getUserByUsername(username);
         NotificationMsg msgToSend=new NotificationMsg(
                 (byte) 0, //PM
                 db.getUsernameByConnectionID(connectionId), //posting user = this user
                 this.getContent()); //content
-        if(db.isUserLoggedInByUsername(username)){
-            connections.send(userToSendNotification,msgToSend);
+        if(userToSendNotification.isloggedin()){
+            connections.send(userToSendNotification.getConnectionID(),msgToSend);
         }
         else {
-            db.addUnseenNotification(username,msgToSend);
+            db.addUnseenNotification(userToSendNotification.getUsername(),msgToSend);
         }
     }
 }
