@@ -37,6 +37,9 @@ void keyboardThreadTask::operator()() {
 
 
             char *currOptcode=new char[2];
+            char *endline=new char[1];
+             endline[0]=';';
+             bool toSendEndline=true;
 
             if (!words.empty()) {
                 if (currtWord == "REGISTER") { // todo
@@ -47,20 +50,26 @@ void keyboardThreadTask::operator()() {
 
                     handler.sendFrameAscii(words.at(1), '\0'); //userName
                     handler.sendFrameAscii(words.at(2), '\0'); //password
+                    handler.sendFrameAscii(words.at(3), '\0'); //birthday
+
 
                 }
 
                 else if (currtWord.compare("LOGIN")==0) {
-                    cout << "AA" << endl;
                     shortToBytes((short) 2, currOptcode);
                     handler.sendBytes(currOptcode, 2);
 
                     handler.sendFrameAscii(words.at(1), '\0'); //userName
                     handler.sendFrameAscii(words.at(2), '\0'); //password
-                    handler.sendBytes(currOptcode, 2);
+                    handler.sendFrameAscii(words.at(3), ';'); //password
+//             //       handler.sendBytes(currOptcode, 2);
+//
+//                    shortToBytes((short) 1, currOptcode); //todo make sure Captcha
+//                    handler.sendBytes(currOptcode, 2);
+//                    string endline=";";
+//                    handler.sendLine(endline);
 
-                    shortToBytes((short) 1, currOptcode); //todo make sure Captcha
-                    handler.sendBytes(currOptcode, 2);
+  //                  handler.sendBytes(currOptcode, 1);
 
                 }
                 else if ((currtWord.compare("LOGOUT")==0)) {
@@ -123,13 +132,17 @@ void keyboardThreadTask::operator()() {
                 }
                     // todo add ;
                 else {
+                    toSendEndline=false;
                     cout << "TRY A DIFFERENT COMMEND" << endl;
                //     break;
                 }
             }
-            delete currOptcode;
+           if(toSendEndline)
+               handler.sendBytes(endline,1);
+               delete currOptcode;
 
         }
+
     }
 
 
