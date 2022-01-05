@@ -39,7 +39,6 @@ void keyboardThreadTask::operator()() {
             char *currOptcode=new char[2];
 
             if (!words.empty()) {
-
                 if (currtWord == "REGISTER") { // todo
                     shortToBytes((short) 1, currOptcode);
                     handler.sendBytes(currOptcode, 2);
@@ -51,7 +50,8 @@ void keyboardThreadTask::operator()() {
 
                 }
 
-                if (currtWord.compare("LOGIN")==0) {
+                else if (currtWord.compare("LOGIN")==0) {
+                    cout << "AA" << endl;
                     shortToBytes((short) 2, currOptcode);
                     handler.sendBytes(currOptcode, 2);
 
@@ -63,46 +63,46 @@ void keyboardThreadTask::operator()() {
                     handler.sendBytes(currOptcode, 2);
 
                 }
-                if ((currtWord.compare("LOGOUT")==0)) {
+                else if ((currtWord.compare("LOGOUT")==0)) {
                     shortToBytes((short) 3, currOptcode);
                     handler.sendBytes(currOptcode, 2);
                     shouldTerminate = false;
                 }
 
-                if ((currtWord.compare("FOLLOW")==0)){
+                else if ((currtWord.compare("FOLLOW")==0)){
                     shortToBytes((short) 4, currOptcode);
                     handler.sendBytes(currOptcode, 2);
                     shortToBytes((short) 0, currOptcode); // todo make sure its ok to use currOptcode twice
                     handler.sendFrameAscii(words[1], '\0'); //username
                 }
 
-                if ((currtWord.compare("UNFOLLOW")==0)){
+                else if ((currtWord.compare("UNFOLLOW")==0)){
                     shortToBytes((short) 4, currOptcode);
                     handler.sendBytes(currOptcode, 2);
                     shortToBytes((short) 1, currOptcode); // todo make sure its ok to use currOptcode twice
                     handler.sendFrameAscii(words[1], '\0'); //username
                 }
 
-                if ((currtWord.compare("POST")==0)){
+                else if ((currtWord.compare("POST")==0)){
                     shortToBytes((short) 5, currOptcode);
                     handler.sendBytes(currOptcode, 2);
 //                    string content = words[1];
                     handler.sendFrameAscii(words[1], '\0'); //content
                 }
 
-                if ((currtWord.compare("PM")==0)){
+                else if ((currtWord.compare("PM")==0)){
                     shortToBytes((short) 6, currOptcode);
                     handler.sendBytes(currOptcode, 2);
                     handler.sendFrameAscii(words.at(1), '\0'); //userName
                     handler.sendFrameAscii(words.at(2), '\0'); //content
                 }
 
-                if ((currtWord.compare("LOGSTAT")==0)){
+                else if ((currtWord.compare("LOGSTAT")==0)){
                     shortToBytes((short) 7, currOptcode);
                     handler.sendBytes(currOptcode, 2);
                 }
 
-                if ((currtWord.compare("STAT")==0)){ // TODO name after name | |
+                else if ((currtWord.compare("STAT")==0)){ // TODO name after name | |
                     shortToBytes((short) 8, currOptcode);
                     handler.sendBytes(currOptcode, 2);
 
@@ -115,7 +115,7 @@ void keyboardThreadTask::operator()() {
                     }
                     handler.sendFrameAscii(usersNames, '\0');
                 }
-                if ((currtWord.compare("BLOCK")==0)){
+                else if ((currtWord.compare("BLOCK")==0)){
                     shortToBytes((short) 8, currOptcode);
                     handler.sendBytes(currOptcode, 2);
                     string userName = words[1];
