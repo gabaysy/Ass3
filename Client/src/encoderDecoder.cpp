@@ -80,7 +80,7 @@ void keyboardThreadTask::operator()() {
                 else if ((currtWord.compare("LOGOUT")==0)) {
                     shortToBytes((short) 3, currOptcode);
                     handler.sendBytes(currOptcode, 2);
-                    shouldTerminate = false;
+                    shouldTerminate = true;
                 }
 
                 else if ((currtWord.compare("FOLLOW")==0)){
@@ -101,7 +101,11 @@ void keyboardThreadTask::operator()() {
                     shortToBytes((short) 5, currOptcode);
                     handler.sendBytes(currOptcode, 2);
 //                    string content = words[1];
-                    handler.sendFrameAscii(words[1], '\0'); //content
+                    string content="";
+                    for(int i=1; i<words.size();i++){
+                        content = content+ words[i]+" ";
+                    }
+                    handler.sendFrameAscii(content, '\0'); //content
                 }
 
                 else if ((currtWord.compare("PM")==0)){
@@ -144,7 +148,7 @@ void keyboardThreadTask::operator()() {
             }
            if(toSendEndline)
                handler.sendBytes(endline,1);
-                cout << "HERE" << endl;
+
                delete currOptcode;
                delete endline;
 
