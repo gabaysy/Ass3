@@ -36,31 +36,33 @@ public class PostMsg implements Message {
 
         //notification to users who follow me
         LinkedList<User> usersToSendNotificationDueToFollow=db.usersToSendNotificationDueToFollow(connectionId);
-        for (User currUser: usersToSendNotificationDueToFollow) {
-            NotificationMsg msgToSend= new NotificationMsg(
-                    (byte) 1, //Public
-                    db.getUsernameByConnectionID(connectionId), //posting user = this user
-                    this.getContent()); //content
-            if(currUser.isloggedin()) {
-                connections.send(currUser.getConnectionID(), msgToSend); //content
-            }
-            else {
-                db.addUnseenNotification(currUser.getUsername(),msgToSend);
+        if(usersToSendNotificationDueToFollow!=null && !usersToSendNotificationDueToFollow.isEmpty()) {
+            for (User currUser : usersToSendNotificationDueToFollow) {
+                NotificationMsg msgToSend = new NotificationMsg(
+                        (byte) 1, //Public
+                        db.getUsernameByConnectionID(connectionId), //posting user = this user
+                        this.getContent()); //content
+                if (currUser.isloggedin()) {
+                    connections.send(currUser.getConnectionID(), msgToSend); //content
+                } else {
+                    db.addUnseenNotification(currUser.getUsername(), msgToSend);
+                }
             }
         }
 
         //notification to users I tagged
         LinkedList<User> IDsToSendNotificationDueToTag=db.IDsToSendNotificationDueToTag(this.content);
-        for (User currUser: IDsToSendNotificationDueToTag) {
-            NotificationMsg msgToSend=new NotificationMsg(
-                    (byte) 1, //Public
-                    db.getUsernameByConnectionID(connectionId), //posting user = this user
-                    this.getContent());
-            if(currUser.isloggedin()) {
-                connections.send(currUser.getConnectionID(), msgToSend); //content
-            }
-            else {
-                db.addUnseenNotification(currUser.getUsername(),msgToSend);
+        if(IDsToSendNotificationDueToTag!=null && !IDsToSendNotificationDueToTag.isEmpty()) {
+            for (User currUser : IDsToSendNotificationDueToTag) {
+                NotificationMsg msgToSend = new NotificationMsg(
+                        (byte) 1, //Public
+                        db.getUsernameByConnectionID(connectionId), //posting user = this user
+                        this.getContent());
+                if (currUser.isloggedin()) {
+                    connections.send(currUser.getConnectionID(), msgToSend); //content
+                } else {
+                    db.addUnseenNotification(currUser.getUsername(), msgToSend);
+                }
             }
         }
     }
