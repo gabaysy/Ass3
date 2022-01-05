@@ -1,7 +1,6 @@
-package bgu.spl.net.srv.BGS.msg;
+package bgu.spl.net.api.bidi;
 
-import bgu.spl.net.api.bidi.Connections;
-import bgu.spl.net.srv.BgsDB;
+import bgu.spl.net.srv.BGS.BgsDB;
 
 public interface Message {
     public void process(BgsDB db, Connections connections, int connectionId);

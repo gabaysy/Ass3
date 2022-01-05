@@ -1,6 +1,6 @@
-package bgu.spl.net.srv.bidi;
+package bgu.spl.net.srv.BGS;
 
-import bgu.spl.net.srv.User;
+import bgu.spl.net.srv.BGS.User;
 
 public class post {
 

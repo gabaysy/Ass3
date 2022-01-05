@@ -1,12 +1,13 @@
-package bgu.spl.net.srv.BGS;
-import bgu.spl.net.srv.BGS.msg.*;
+package bgu.spl.net.impl;
+import bgu.spl.net.api.bidi.Message;
+import bgu.spl.net.impl.msg.*;
 
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
 
-public class MessageEncoderDecoder implements bgu.spl.net.api.MessageEncoderDecoder<Message> {
+public class MessageEncoderDecoder implements bgu.spl.net.api.bidi.MessageEncoderDecoder<Message> {
 
     private byte[] bytes = new byte[1 << 10]; //start with 1k
     private int len = 0;
@@ -317,9 +318,10 @@ public class MessageEncoderDecoder implements bgu.spl.net.api.MessageEncoderDeco
                     data_10= ack.getAdditionalData().getBytes(StandardCharsets.UTF_8);
                     dataLength=data_10.length;
                 }
-                ByteBuffer buff_10 = ByteBuffer.wrap(new byte[4+dataLength]);
+                ByteBuffer buff_10 = ByteBuffer.wrap(new byte[5+dataLength]);
                 buff_10.put(optCode_10);
                 buff_10.put(msgOptCode_10);
+                buff_10.put(";".getBytes(StandardCharsets.UTF_8));
                 if(ack.hasData()){
                     buff_10.put(data_10);
                 }

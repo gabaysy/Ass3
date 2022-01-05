@@ -1,4 +1,4 @@
-package bgu.spl.net.srv.BGS.msg;
+package bgu.spl.net.impl.msg;
 
 public class LogStatInfo {
     private int userAge;

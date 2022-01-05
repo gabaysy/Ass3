@@ -1,9 +1,9 @@
-package bgu.spl.net.srv.BGS;
+package bgu.spl.net.impl;
 
 import bgu.spl.net.api.bidi.BidiMessagingProtocol;
 import bgu.spl.net.api.bidi.Connections;
-import bgu.spl.net.srv.BGS.msg.Message;
-import bgu.spl.net.srv.BgsDB;
+import bgu.spl.net.api.bidi.Message;
+import bgu.spl.net.srv.BGS.BgsDB;
 
 public class BidiMessagingProtocolImpl<T> implements BidiMessagingProtocol {
 

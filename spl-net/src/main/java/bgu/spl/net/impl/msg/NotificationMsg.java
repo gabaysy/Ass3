@@ -1,9 +1,10 @@
-package bgu.spl.net.srv.BGS.msg;
+package bgu.spl.net.impl.msg;
 
 import bgu.spl.net.api.bidi.Connections;
-import bgu.spl.net.srv.BgsDB;
+import bgu.spl.net.api.bidi.Message;
+import bgu.spl.net.srv.BGS.BgsDB;
 
-public class NotificationMsg implements Message{
+public class NotificationMsg implements Message {
     final short optCode;
     final short PM_PublicInShort;
     final PM_Public pmOrPublic;

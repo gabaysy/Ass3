@@ -1,9 +1,10 @@
-package bgu.spl.net.srv.BGS.msg;
+package bgu.spl.net.impl.msg;
 
 import bgu.spl.net.api.bidi.Connections;
-import bgu.spl.net.srv.BgsDB;
+import bgu.spl.net.api.bidi.Message;
+import bgu.spl.net.srv.BGS.BgsDB;
 
-public class ErrorMsg implements Message{
+public class ErrorMsg implements Message {
     final short optcode;
 
     public ErrorMsg(short messageOptcode) {

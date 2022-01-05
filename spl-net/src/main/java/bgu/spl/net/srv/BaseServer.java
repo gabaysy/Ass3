@@ -1,10 +1,8 @@
 package bgu.spl.net.srv;
 
-import bgu.spl.net.api.MessageEncoderDecoder;
+import bgu.spl.net.api.bidi.MessageEncoderDecoder;
 import bgu.spl.net.api.bidi.BidiMessagingProtocol;
-import bgu.spl.net.api.bidi.Connections;
 import bgu.spl.net.impl.ConnectionsImp;
-import bgu.spl.net.srv.BGS.BidiMessagingProtocolImpl;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -68,5 +66,5 @@ public abstract class BaseServer<T> implements Server<T> {
     }
 
     protected abstract void execute(BlockingConnectionHandler<T>  handler);
-
+    //Todo??
 }

@@ -1,8 +1,7 @@
-package bgu.spl.net.srv;
+package bgu.spl.net.srv.BGS;
 
-import bgu.spl.net.srv.BGS.msg.LogStatInfo;
-import bgu.spl.net.srv.BGS.msg.NotificationMsg;
-import bgu.spl.net.srv.bidi.post;
+import bgu.spl.net.impl.msg.LogStatInfo;
+import bgu.spl.net.impl.msg.NotificationMsg;
 
 import java.util.HashMap;
 import java.util.LinkedList;

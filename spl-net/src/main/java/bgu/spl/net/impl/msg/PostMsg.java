@@ -1,8 +1,9 @@
-package bgu.spl.net.srv.BGS.msg;
+package bgu.spl.net.impl.msg;
 
 import bgu.spl.net.api.bidi.Connections;
-import bgu.spl.net.srv.BgsDB;
-import bgu.spl.net.srv.User;
+import bgu.spl.net.api.bidi.Message;
+import bgu.spl.net.srv.BGS.BgsDB;
+import bgu.spl.net.srv.BGS.User;
 
 import java.util.LinkedList;
 

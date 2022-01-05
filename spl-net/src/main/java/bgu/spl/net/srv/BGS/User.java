@@ -1,8 +1,7 @@
-package bgu.spl.net.srv;
+package bgu.spl.net.srv.BGS;
 
-import bgu.spl.net.srv.BGS.msg.NotificationMsg;
+import bgu.spl.net.impl.msg.NotificationMsg;
 
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ConcurrentLinkedDeque;
