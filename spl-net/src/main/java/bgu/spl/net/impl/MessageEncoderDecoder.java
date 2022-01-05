@@ -86,7 +86,7 @@ public class MessageEncoderDecoder implements bgu.spl.net.api.bidi.MessageEncode
             currIndex++;
         }
         String _birthday= new String(birthday, 0, birthLen, StandardCharsets.UTF_8);
-
+        len=0;
         return new RegisterMsg(_username,_password,_birthday);
     }
 
@@ -125,7 +125,7 @@ public class MessageEncoderDecoder implements bgu.spl.net.api.bidi.MessageEncode
         if(captcha!=bytes[currIndex++]) { //debug
             System.out.println("Problem");
         }
-
+        len=0;
         return new LoginMsg(_username,_password,captcha);
     }
 
@@ -148,7 +148,7 @@ public class MessageEncoderDecoder implements bgu.spl.net.api.bidi.MessageEncode
             userLen++;
         }
         String _username= new String(username, 0, userLen, StandardCharsets.UTF_8);
-
+        len=0;
         return new FollowMsg(foll_unFoll, _username);
     }
 
@@ -166,7 +166,7 @@ public class MessageEncoderDecoder implements bgu.spl.net.api.bidi.MessageEncode
         }
 
         String _content= new String(content, 0, contentLen, StandardCharsets.UTF_8);
-
+        len=0;
         return new PostMsg(_content);
     }
 
@@ -211,11 +211,13 @@ public class MessageEncoderDecoder implements bgu.spl.net.api.bidi.MessageEncode
         }
         String _sendingTime= new String(sendingTime, 0, sendingTimeLen, StandardCharsets.UTF_8);
 
+        len=0;
         return new PMMsg(_username,_content,_sendingTime);
     }
 
 
     private Message decLogstat(byte[] bytes) {
+        len=0;
         return new LogstatMsg();
     }
 
@@ -234,7 +236,7 @@ public class MessageEncoderDecoder implements bgu.spl.net.api.bidi.MessageEncode
         }
 
         String _usernames= new String(usernames, 0, usersLen, StandardCharsets.UTF_8);
-
+        len=0;
         return new StatMsg(_usernames);
     }
 
@@ -252,6 +254,7 @@ public class MessageEncoderDecoder implements bgu.spl.net.api.bidi.MessageEncode
         }
 
         String _username= new String(username, 0, userLen, StandardCharsets.UTF_8);
+        len=0;
         return new BlockMsg(_username);
     }
 
