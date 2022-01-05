@@ -61,7 +61,12 @@ void keyboardThreadTask::operator()() {
 
                     handler.sendFrameAscii(words.at(1), '\0'); //userName
                     handler.sendFrameAscii(words.at(2), '\0'); //password
-                    handler.sendFrameAscii(words.at(3), ';'); //password
+                    char *captcha=new char[1];
+                    if(words.at(3).compare("1")==0){
+                        captcha[0]=1;
+                        handler.sendBytes(captcha,1);
+                    }
+                    delete captcha;
 //             //       handler.sendBytes(currOptcode, 2);
 //
 //                    shortToBytes((short) 1, currOptcode); //todo make sure Captcha
@@ -139,7 +144,10 @@ void keyboardThreadTask::operator()() {
             }
            if(toSendEndline)
                handler.sendBytes(endline,1);
+                cout << "HERE" << endl;
                delete currOptcode;
+               delete endline;
+
 
         }
 
