@@ -121,10 +121,6 @@ public class MessageEncoderDecoder implements bgu.spl.net.api.bidi.MessageEncode
 
         //captcha
         byte captcha=bytes[currIndex+1];
-
-        if(captcha!=bytes[currIndex++]) { //debug
-            System.out.println("Problem");
-        }
         len=0;
         return new LoginMsg(_username,_password,captcha);
     }
