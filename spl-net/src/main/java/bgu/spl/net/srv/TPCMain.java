@@ -11,7 +11,8 @@ public class TPCMain {
         BgsDB DB = new BgsDB(); //one shared object
 
         Server.threadPerClient(
-                Integer.parseInt(args[0]), //port
+            //    Integer.parseInt(args[0]), //port
+                8870,
                 () -> new BidiMessagingProtocolImpl(DB), //protocol factory
                 MessageEncoderDecoder::new //message encoder decoder factory
         ).serve();
