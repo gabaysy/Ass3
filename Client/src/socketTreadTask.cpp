@@ -46,7 +46,7 @@ void socketTreadTask::operator()() {
                 }
 
 
-                else   if (optCode==10) { // ACK
+           else if (optCode==10) { // ACK
                 handler.getBytes(currBytes, 2);
                 short messageOptcode = bytesToShort(currBytes);
 
