@@ -12,7 +12,7 @@ public class TPCMain {
 
         Server.threadPerClient(
             //    Integer.parseInt(args[0]), //port
-                8870,
+                7777,
                 () -> new BidiMessagingProtocolImpl(DB), //protocol factory
                 MessageEncoderDecoder::new //message encoder decoder factory
         ).serve();
