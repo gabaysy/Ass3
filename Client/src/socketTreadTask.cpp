@@ -9,7 +9,7 @@
 using namespace std;
 
 socketTreadTask::socketTreadTask(ConnectionHandler &connectionHandler) : handler(
-        connectionHandler){}
+        connectionHandler){shouldTerminate=false;}
 
 static short bytesToShort(char* bytesArr)
 {
@@ -19,7 +19,7 @@ static short bytesToShort(char* bytesArr)
 }
 
 void socketTreadTask::operator()() {
-    while (!*shouldTerminate) {
+    while (!shouldTerminate) {
         char currBytes[2];
         handler.getBytes(currBytes, 2);
         short optCode = bytesToShort(currBytes);
@@ -51,7 +51,7 @@ void socketTreadTask::operator()() {
                 short messageOptcode = bytesToShort(currBytes);
 
                 if (messageOptcode == 3) { //log out
-                    *shouldTerminate = true;
+                    shouldTerminate = true;
                     cout << "ACK " + std::string(std::to_string((int) messageOptcode)) << endl;
                     break;
                 }
