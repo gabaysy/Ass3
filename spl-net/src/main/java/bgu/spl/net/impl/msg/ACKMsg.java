@@ -31,7 +31,7 @@ public class ACKMsg implements Message {
         return messageOptcode;
     }
     public boolean hasData(){
-        return this.additionalData.isPresent();
+        return this.additionalData!=null && this.additionalData.isPresent();
     }
     public String getAdditionalData() {
         return additionalData.get();
@@ -42,7 +42,8 @@ public class ACKMsg implements Message {
         //not implemented- relevant to server-to-client only
     }
 
-    public String toString(){
+    public String ACKToString(){
+  //      return "ACK ADDITIONAL INFO";
         String ans= this.getOptCode() +" "+ this.getMessageOptcode();
         if(this.additionalData.isPresent())
             ans+=" "+additionalData.get();

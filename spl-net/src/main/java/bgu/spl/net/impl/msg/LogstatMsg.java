@@ -23,7 +23,7 @@ public class LogstatMsg implements Message {
         HashMap<User, LogStatInfo> logStatsInfo= db.logStat(connectionId);// added parameter
         if(logStatsInfo!=null){ //success
             for (LogStatInfo curr: logStatsInfo.values()) {//Todo make sure .values gets all values
-                connections.send(connectionId,new ACKMsg(this.getOptCode(),curr.toString()));
+                connections.send(connectionId,new ACKMsg(this.getOptCode(),curr.StatToString()));
             }
         }
         else //not success

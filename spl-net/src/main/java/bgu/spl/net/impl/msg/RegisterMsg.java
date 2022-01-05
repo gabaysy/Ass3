@@ -65,6 +65,7 @@ public class RegisterMsg implements Message {
                 success ?
                 new ACKMsg(this.getOptCode()) :
                 new ErrorMsg(this.getOptCode());
-        connections.send(connectionId,messageToReturn);
+        connections.send(connectionId, messageToReturn);
+     //   connections.send(connectionId, new ACKMsg(this.getOptCode()));
     }
 }
