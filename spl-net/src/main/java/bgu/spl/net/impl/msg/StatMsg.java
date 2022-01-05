@@ -42,7 +42,7 @@ public class StatMsg implements Message {
         HashMap<User, LogStatInfo> statsInfo= db.stat(this.getSeperatedUsernames(),connectionId);//added parameter
         if(statsInfo!=null){ //success
             for (LogStatInfo curr: statsInfo.values()) {//Todo make sure .values gets all values
-                connections.send(connectionId,new ACKMsg(this.getOptCode(),curr.toString()));
+                connections.send(connectionId,new ACKMsg(this.getOptCode(),curr.StatToString()));
             }
         }
         else //not success

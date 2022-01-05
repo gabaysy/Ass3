@@ -29,7 +29,7 @@ public class LogStatInfo {
         return numOfFollowing;
     }
 
-    public String toString(){
+    public String StatToString(){
         return ""+this.getUserAge()+""+this.getPostsPosted()+""+this.getNumOfFollowers()+""+this.getNumOfFollowing();
     }
 }

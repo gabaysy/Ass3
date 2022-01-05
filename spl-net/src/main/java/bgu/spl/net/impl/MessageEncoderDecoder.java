@@ -72,7 +72,7 @@ public class MessageEncoderDecoder implements bgu.spl.net.api.bidi.MessageEncode
             passLen++;
             currIndex++;
         }
-        String _password= new String(username, 0, passLen, StandardCharsets.UTF_8);
+        String _password= new String(password, 0, passLen, StandardCharsets.UTF_8);
 
         //birthday
         currIndex++;
@@ -85,7 +85,7 @@ public class MessageEncoderDecoder implements bgu.spl.net.api.bidi.MessageEncode
             birthLen++;
             currIndex++;
         }
-        String _birthday= new String(username, 0, birthLen, StandardCharsets.UTF_8);
+        String _birthday= new String(birthday, 0, birthLen, StandardCharsets.UTF_8);
 
         return new RegisterMsg(_username,_password,_birthday);
     }
@@ -117,7 +117,7 @@ public class MessageEncoderDecoder implements bgu.spl.net.api.bidi.MessageEncode
             passLen++;
             currIndex++;
         }
-        String _password= new String(username, 0, passLen, StandardCharsets.UTF_8);
+        String _password= new String(password, 0, passLen, StandardCharsets.UTF_8);
 
         //captcha
         byte captcha=bytes[bytes.length-1];
@@ -196,7 +196,7 @@ public class MessageEncoderDecoder implements bgu.spl.net.api.bidi.MessageEncode
             contentLen++;
             currIndex++;
         }
-        String _content= new String(username, 0, contentLen, StandardCharsets.UTF_8);
+        String _content= new String(content, 0, contentLen, StandardCharsets.UTF_8);
 
         //sending time
         currIndex++;
@@ -209,7 +209,7 @@ public class MessageEncoderDecoder implements bgu.spl.net.api.bidi.MessageEncode
             sendingTimeLen++;
             currIndex++;
         }
-        String _sendingTime= new String(username, 0, sendingTimeLen, StandardCharsets.UTF_8);
+        String _sendingTime= new String(sendingTime, 0, sendingTimeLen, StandardCharsets.UTF_8);
 
         return new PMMsg(_username,_content,_sendingTime);
     }
