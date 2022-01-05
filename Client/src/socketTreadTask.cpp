@@ -46,7 +46,7 @@ void socketTreadTask::operator()() {
                 }
 
 
-            if (optCode==10) { // ACK
+                else   if (optCode==10) { // ACK
                 handler.getBytes(currBytes, 2);
                 short messageOptcode = bytesToShort(currBytes);
 
@@ -64,7 +64,7 @@ void socketTreadTask::operator()() {
                 }
             }
 
-        if (optCode==11) { //Error
+        else if (optCode==11) { //Error
                 handler.getBytes(currBytes, 2);
                 short optcodeOfCommendThatFail = bytesToShort(currBytes);
 
