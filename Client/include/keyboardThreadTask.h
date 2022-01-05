@@ -15,7 +15,7 @@ public:
 
 private:
     ConnectionHandler &handler;
-    bool *shouldTerminate; //shouldTerminate
+    bool shouldTerminate; //shouldTerminate
 };
 
 
