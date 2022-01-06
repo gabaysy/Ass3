@@ -3,7 +3,6 @@
 //
 
 #include "../include/keyboardThreadTask.h"
-#include "regex"
 #include "../include/connectionHandler.h"
 #include <boost/algorithm/string.hpp>
 
@@ -23,7 +22,7 @@ static void shortToBytes(short num, char* bytesArr) // from assi
 
 void keyboardThreadTask::operator()() {
 
-    while (!shouldTerminate  ) {
+    while (!shouldTerminate  ) {//REGISTER YONI ABC 01-12-1990 LOGIN YONI ABC 1
         const short bufsize = 1024;
         char buf[bufsize];
             std::cin.getline(buf, bufsize);
@@ -45,9 +44,6 @@ void keyboardThreadTask::operator()() {
                 if (currtWord == "REGISTER") { // todo
                     shortToBytes((short) 1, currOptcode);
                     handler.sendBytes(currOptcode, 2);
-//                    string userName =words.at(1);
-//                    string password = words.at(2);
-
                     handler.sendFrameAscii(words.at(1), '\0'); //userName
                     handler.sendFrameAscii(words.at(2), '\0'); //password
                     handler.sendFrameAscii(words.at(3), '\0'); //birthday
@@ -112,7 +108,11 @@ void keyboardThreadTask::operator()() {
                     shortToBytes((short) 6, currOptcode);
                     handler.sendBytes(currOptcode, 2);
                     handler.sendFrameAscii(words.at(1), '\0'); //userName
-                    handler.sendFrameAscii(words.at(2), '\0'); //content
+                    string content="";
+                    for(int i=1; i<words.size();i++){
+                        content = content+ words[i]+" ";
+                    }
+                    handler.sendFrameAscii(content, '\0'); //content
                 }
 
                 else if ((currtWord.compare("LOGSTAT")==0)){
@@ -120,7 +120,7 @@ void keyboardThreadTask::operator()() {
                     handler.sendBytes(currOptcode, 2);
                 }
 
-                else if ((currtWord.compare("STAT")==0)){ // TODO name after name | |
+                else if ((currtWord.compare("STAT")==0)){
                     shortToBytes((short) 8, currOptcode);
                     handler.sendBytes(currOptcode, 2);
 
@@ -139,11 +139,11 @@ void keyboardThreadTask::operator()() {
                     string userName = words[1];
                     handler.sendFrameAscii(userName, '\0');
                 }
-                    // todo add ;
+
                 else {
                     toSendEndline=false;
                     cout << "TRY A DIFFERENT COMMEND" << endl;
-               //     break;
+
                 }
             }
            if(toSendEndline)
@@ -154,7 +154,7 @@ void keyboardThreadTask::operator()() {
 
 
         }
-
+    std::cout << "thread KEYBOARD is closing..." << std::endl;
     }
 
 
