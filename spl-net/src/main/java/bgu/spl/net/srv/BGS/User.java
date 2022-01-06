@@ -35,6 +35,9 @@ public class User {
         this.loggedin=new AtomicBoolean(false);
         this.connectionID=connectionID;
         this.unSeenNotifications=new ConcurrentLinkedDeque<NotificationMsg>();
+        
+        int birthYear= Integer.parseInt(this.birthday.substring(6,9)); //todo make sure index
+        this.age=(2022-birthYear);
     }
 
     public boolean login(){
@@ -83,7 +86,9 @@ public class User {
     }
 
     public int getAge() {
-        return age;
+
+        return this.age;
+
     }
 
     public void setAge(int age) {
