@@ -58,6 +58,7 @@ public class BlockingConnectionHandler<T> implements Runnable, ConnectionHandler
         try{
             out.write(encdec.encode(msg));
             out.flush();
+            System.out.println("MSG SENT TO CLIENT"); //debug
         } catch (IOException e) {
             e.printStackTrace();
         }

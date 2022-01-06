@@ -29,6 +29,7 @@ public boolean register (String name, String code, String date,int connectionId)
         User userToAdd= new User(name , code , date, connectionId);
         users.putIfAbsent(name,userToAdd);
         usersById.putIfAbsent(connectionId, userToAdd);
+        System.out.println("user "+userToAdd.getUsername()+ "is register"); //debug
         return true;
 }
 
@@ -166,8 +167,15 @@ public boolean register (String name, String code, String date,int connectionId)
 
 
     public LinkedList<User> IDsToSendNotificationDueToTag(String content){
-        //todo implement this- returns a list of users that need to get notifications due to Tag
-        return null;
+        LinkedList<User> toRet= new LinkedList<>();
+        String currname;
+        for (User curruser : this.users.values())
+        {
+            currname="@"+curruser.getUsername();
+            if (content.contains(currname))
+                toRet.add(curruser);
+        }
+        return toRet;
     }
     //for notifications
 
