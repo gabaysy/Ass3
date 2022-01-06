@@ -133,9 +133,13 @@ public boolean register (String name, String code, String date,int connectionId)
             return null;
         HashMap<User, LogStatInfo> mapToReturn=new HashMap<>();
 
-        for(String name : usernames){
-            User currUser =users.get(name);
-            mapToReturn.put(currUser,new LogStatInfo(currUser.getAge(),currUser.getNumPost(),currUser.getNumOfFollowers(),currUser.getNumOfFolloweing()));
+        for(String name : usernames) {
+            if (!users.containsKey(name)) {
+                System.out.println("error in stat- no such user");
+            } else {
+                User currUser = users.get(name);
+                mapToReturn.put(currUser, new LogStatInfo(currUser.getAge(), currUser.getNumPost(), currUser.getNumOfFollowers(), currUser.getNumOfFolloweing()));
+            }
         }
     return mapToReturn;
     }

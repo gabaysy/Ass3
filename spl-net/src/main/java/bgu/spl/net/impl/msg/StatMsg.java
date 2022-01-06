@@ -14,7 +14,7 @@ public class StatMsg implements Message {
     final String ListOfUsernames;
     final List<String> seperatedUsernames;
 
-    public StatMsg(String listOfUsernames) {
+    public StatMsg(String listOfUsernames) {// todo - we have a problem here!!
         this.optCode = 8;
         ListOfUsernames = listOfUsernames;
         seperatedUsernames = new LinkedList<>();
@@ -40,7 +40,7 @@ public class StatMsg implements Message {
     @Override
     public void process(BgsDB db, Connections connections, int connectionId) {
         HashMap<User, LogStatInfo> statsInfo= db.stat(this.getSeperatedUsernames(),connectionId);//added parameter
-        if(statsInfo!=null){ //success
+        if(statsInfo!=null & !statsInfo.isEmpty()){ //success
             for (LogStatInfo curr: statsInfo.values()) {//Todo make sure .values gets all values
                 connections.send(connectionId,new ACKMsg(this.getOptCode(),curr.StatToString()));
             }
