@@ -37,7 +37,7 @@ int main (int argc, char *argv[]) {
 
     t1.join();
     std::cerr << "Cannot connect to" << std::endl;
-    t1.join();
+    t2.join();
 
 //    delete (shouldTerminate);
     return 0;
