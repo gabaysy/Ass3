@@ -8,8 +8,9 @@
 
 using namespace std;
 
-socketTreadTask::socketTreadTask(ConnectionHandler &connectionHandler) : handler(
-        connectionHandler){shouldTerminate=false;}
+socketTreadTask::socketTreadTask(ConnectionHandler &connectionHandler) :
+        handler(connectionHandler),
+        shouldTerminate(false){};
 
 static short bytesToShort(char* bytesArr)
 {
