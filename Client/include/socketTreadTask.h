@@ -10,12 +10,12 @@
 
 class socketTreadTask{
 public:
-    socketTreadTask(ConnectionHandler &connectionHandler );
+    socketTreadTask(ConnectionHandler &connectionHandler, bool* shouldTerminate );
     void operator()();
 
 private:
     ConnectionHandler &handler;
-    bool shouldTerminate;
+    bool *amILogin;
 
 
 };

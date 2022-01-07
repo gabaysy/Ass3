@@ -8,9 +8,9 @@
 
 using namespace std;
 
-socketTreadTask::socketTreadTask(ConnectionHandler &connectionHandler) :
+socketTreadTask::socketTreadTask(ConnectionHandler &connectionHandler, bool* _amILogin) :
         handler(connectionHandler),
-        shouldTerminate(false){};
+        amILogin(_amILogin){};
 
 static short bytesToShort(char* bytesArr)
 {
@@ -20,6 +20,7 @@ static short bytesToShort(char* bytesArr)
 }
 
 void socketTreadTask::operator()() {
+    bool shouldTerminate=false;
     while (!shouldTerminate) {
         char currBytes[2];
         handler.getBytes(currBytes, 2);
@@ -51,10 +52,11 @@ void socketTreadTask::operator()() {
                 handler.getBytes(currBytes, 2);
                 short messageOptcode = bytesToShort(currBytes);
 
+                if (messageOptcode == 2) //login
+                        *amILogin=true;
                 if (messageOptcode == 3) { //log out
                     shouldTerminate = true;
-                    cout << "ACK " + std::string(std::to_string((int) messageOptcode)) << endl;
-
+                    cout << "ACK " + std::string(std::to_string((int) messageOptcode)) << endl; // unnecessary?
                 }
 
                 else {

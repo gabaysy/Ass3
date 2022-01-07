@@ -9,9 +9,9 @@
 using boost::asio::ip::tcp;
 
 
-keyboardThreadTask::keyboardThreadTask(ConnectionHandler &connectionHandler) :
+keyboardThreadTask::keyboardThreadTask(ConnectionHandler &connectionHandler , bool* _amILogin) :
        handler(connectionHandler),
-       shouldTerminate (false){};
+       amILogin (_amILogin){};
 
 using namespace std;
 
@@ -22,7 +22,7 @@ static void shortToBytes(short num, char* bytesArr) // from assi
 }
 
 void keyboardThreadTask::operator()() {
-
+        bool shouldTerminate=false;
     while (!shouldTerminate  ) {//REGISTER YONI ABC 01-12-1990 LOGIN YONI ABC 1
         const short bufsize = 1024;
         char buf[bufsize];
@@ -74,6 +74,7 @@ void keyboardThreadTask::operator()() {
             else if ((currtWord.compare("LOGOUT") == 0)) {
                 shortToBytes((short) 3, currOptcode);
                 handler.sendBytes(currOptcode, 2);
+                if (*amILogin)
                 shouldTerminate = true;
             }
 
@@ -112,7 +113,7 @@ void keyboardThreadTask::operator()() {
                 handler.sendBytes(currOptcode, 2);
                 handler.sendFrameAscii(words.at(1), '\0'); //userName
                 string content = "";
-                for (unsigned int i = 1; i < words.size(); i++) {
+                for (unsigned int i = 2; i < words.size(); i++) {
                     content = content + words[i] + " ";
                 }
                 handler.sendFrameAscii(content, '\0'); //content
@@ -132,7 +133,7 @@ void keyboardThreadTask::operator()() {
                 }
                 handler.sendFrameAscii(usersNames, '\0');
             } else if ((currtWord.compare("BLOCK") == 0)) {
-                shortToBytes((short) 8, currOptcode);
+                shortToBytes((short) 12, currOptcode);
                 handler.sendBytes(currOptcode, 2);
                 string userName = words[1];
                 handler.sendFrameAscii(userName, '\0');

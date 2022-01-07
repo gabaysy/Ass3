@@ -10,12 +10,12 @@
 
 class keyboardThreadTask{
 public:
-    keyboardThreadTask(ConnectionHandler &connectionHandler);
+    keyboardThreadTask(ConnectionHandler &connectionHandler , bool* amILogin);
     void operator()();
 
 private:
     ConnectionHandler &handler;
-    bool shouldTerminate; //shouldTerminate
+    bool *amILogin;
 };
 
 

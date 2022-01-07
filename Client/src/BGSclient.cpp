@@ -22,14 +22,16 @@ int main (int argc, char *argv[]) {
         std::cerr << "Cannot connect to " << host << ":" << port << std::endl;
         return 1;
     }
-    socketTreadTask task1 = socketTreadTask(connectionHandler);
-    keyboardThreadTask task2 = keyboardThreadTask(connectionHandler);
+    bool *amILogin = new bool ;
+    *amILogin=false;
+    socketTreadTask task1 = socketTreadTask(connectionHandler, amILogin);
+    keyboardThreadTask task2 = keyboardThreadTask(connectionHandler, amILogin);
     std::thread t1(std::ref(task2));
     std::thread t2(std::ref(task1));
 
     t1.join();
     t2.join();
-
+    delete amILogin;
     std::cout << "CLOSE PROGRAM PROPERLY" << std::endl; //DEBUG
     return 0;
 
