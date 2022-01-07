@@ -58,7 +58,13 @@ void keyboardThreadTask::operator()() {
                 handler.sendFrameAscii(words.at(2), '\0'); //password
                 char *captcha = new char[1];
                 if (words.at(3).compare("1") == 0) {
+                    std::cout << "captcha is 1" << std::endl; //debug
                     captcha[0] = 1;
+                    handler.sendBytes(captcha, 1);
+                }
+                else{
+                    std::cout << "captcha is not 1" << std::endl; //debug
+                    captcha[0]= 0 ;
                     handler.sendBytes(captcha, 1);
                 }
                 delete captcha;
