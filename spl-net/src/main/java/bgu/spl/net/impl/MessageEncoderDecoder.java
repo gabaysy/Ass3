@@ -137,7 +137,7 @@ public class MessageEncoderDecoder implements bgu.spl.net.api.bidi.MessageEncode
         int userIndex=0;
         int userLen=0;
         byte [] username = new byte[bytes.length-3];
-        while(currIndex<bytes.length) {
+        while(bytes[currIndex]!='\0') {
             username[userIndex]=bytes[currIndex];
             userIndex++;
             currIndex++;
