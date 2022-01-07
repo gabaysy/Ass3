@@ -36,7 +36,7 @@ public class LoginMsg implements Message {
 
     @Override
     public void process(BgsDB db, Connections connections, int connectionId) {
-        System.out.println("Captcha is"+ this.getCaptcha());
+        System.out.println("Captcha is "+ this.getCaptcha());
         if(this.getCaptcha()==0){
 
             connections.send(connectionId, new ErrorMsg(this.getOptCode()));

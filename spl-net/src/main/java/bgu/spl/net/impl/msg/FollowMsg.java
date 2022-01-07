@@ -42,7 +42,7 @@ public class FollowMsg implements Message {
         //response- ACK or error msg
         Message messageToReturn =
                 success ?
-                new ACKMsg(this.getOptCode(), this.getUsername()) :
+                new ACKMsg(this.getOptCode(), " "+ this.getUsername()) :
                 new ErrorMsg(this.getOptCode());
         connections.send(connectionId, messageToReturn);
     }

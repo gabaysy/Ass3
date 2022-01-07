@@ -320,10 +320,10 @@ public class MessageEncoderDecoder implements bgu.spl.net.api.bidi.MessageEncode
                 ByteBuffer buff_10 = ByteBuffer.wrap(new byte[5+dataLength]);
                 buff_10.put(optCode_10);
                 buff_10.put(msgOptCode_10);
-                buff_10.put(";".getBytes(StandardCharsets.UTF_8));
                 if(ack.hasData()){
                     buff_10.put(data_10);
                 }
+                buff_10.put(";".getBytes(StandardCharsets.UTF_8));
                 byte[] ackEncoded = buff_10.array();
                 return ackEncoded;
 

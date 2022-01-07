@@ -30,6 +30,6 @@ public class LogStatInfo {
     }
 
     public String StatToString(){
-        return ""+this.getUserAge()+""+this.getPostsPosted()+""+this.getNumOfFollowers()+""+this.getNumOfFollowing();
+        return " "+this.getUserAge()+" "+this.getPostsPosted()+" "+this.getNumOfFollowers()+" "+this.getNumOfFollowing();
     }
 }
