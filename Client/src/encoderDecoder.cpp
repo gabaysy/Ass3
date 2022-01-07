@@ -68,14 +68,6 @@ void keyboardThreadTask::operator()() {
                     handler.sendBytes(captcha, 1);
                 }
                 delete captcha;
-//             //       handler.sendBytes(currOptcode, 2);
-//
-//                    shortToBytes((short) 1, currOptcode); //todo make sure Captcha
-//                    handler.sendBytes(currOptcode, 2);
-//                    string endline=";";
-//                    handler.sendLine(endline);
-
-                //                  handler.sendBytes(currOptcode, 1);
 
             }
 
@@ -92,13 +84,13 @@ void keyboardThreadTask::operator()() {
 
 
                 char *followOrUnfollow = new char[1];
-                if (words.at(2).compare("1") == 0) {
-                    std::cout << "followOrUnfollow is 1" << std::endl; //debug
+                if (words.at(1).compare("1") == 0) {
+                    std::cout << "command to unfollow" << std::endl; //debug
                     followOrUnfollow[0] = 1;
                     handler.sendBytes(followOrUnfollow, 1);
                 }
-                else{
-                    std::cout << "followOrUnfollow is not 1" << std::endl; //debug
+                else{ //followOrUnfollow = 0
+                    std::cout << "command to follow" << std::endl; //debug
                     followOrUnfollow[0]= 0 ;
                     handler.sendBytes(followOrUnfollow, 1);
                 }
