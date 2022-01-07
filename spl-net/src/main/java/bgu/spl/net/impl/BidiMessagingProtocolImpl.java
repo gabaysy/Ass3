@@ -28,7 +28,7 @@ public class BidiMessagingProtocolImpl<T> implements BidiMessagingProtocol {
     public void process(Object message) {
         Message msgToProcess=(Message)message;
         msgToProcess.process(db, connections , connectionId);
-        if(msgToProcess.getOptCode()==3) {
+        if(msgToProcess.getOptCode()==3) { // TODO DONT CLOSE THE CLIENT IF LOGOUT FAILED!!
             shouldTerminate = true;
             connections.disconnect(connectionId);
         }

@@ -26,9 +26,9 @@ public class BgsDB {
 public boolean register (String name, String code, String date,int connectionId){
     if(users.containsKey(name))
             return false;
-        User userToAdd= new User(name , code , date, connectionId);
+        User userToAdd= new User(name , code , date, -1);
         users.putIfAbsent(name,userToAdd);
-        usersById.putIfAbsent(connectionId, userToAdd);
+//        usersById.putIfAbsent(connectionId, userToAdd);
         System.out.println("user "+userToAdd.getUsername()+ " is register"); //debug
         return true;
 }
