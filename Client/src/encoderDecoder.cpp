@@ -68,30 +68,37 @@ void keyboardThreadTask::operator()() {
                     handler.sendBytes(captcha, 1);
                 }
                 delete captcha;
-//             //       handler.sendBytes(currOptcode, 2);
-//
-//                    shortToBytes((short) 1, currOptcode); //todo make sure Captcha
-//                    handler.sendBytes(currOptcode, 2);
-//                    string endline=";";
-//                    handler.sendLine(endline);
 
-                //                  handler.sendBytes(currOptcode, 1);
+            }
 
-            } else if ((currtWord.compare("LOGOUT") == 0)) {
+            else if ((currtWord.compare("LOGOUT") == 0)) {
                 shortToBytes((short) 3, currOptcode);
                 handler.sendBytes(currOptcode, 2);
                 shouldTerminate = true;
-            } else if ((currtWord.compare("FOLLOW") == 0)) {
+            }
+
+            else if ((currtWord.compare("FOLLOW") == 0)) { //can be follow or unfollow- according to next byte
                 shortToBytes((short) 4, currOptcode);
                 handler.sendBytes(currOptcode, 2);
-                shortToBytes((short) 0, currOptcode); // todo make sure its ok to use currOptcode twice
-                handler.sendFrameAscii(words[1], '\0'); //username
-            } else if ((currtWord.compare("UNFOLLOW") == 0)) {
-                shortToBytes((short) 4, currOptcode);
-                handler.sendBytes(currOptcode, 2);
-                shortToBytes((short) 1, currOptcode); // todo make sure its ok to use currOptcode twice
-                handler.sendFrameAscii(words[1], '\0'); //username
-            } else if ((currtWord.compare("POST") == 0)) {
+         //       shortToBytes((short) 0, currOptcode); // todo make sure its ok to use currOptcode twice
+
+
+                char *followOrUnfollow = new char[1];
+                if (words.at(1).compare("1") == 0) {
+                    std::cout << "command to unfollow" << std::endl; //debug
+                    followOrUnfollow[0] = 1;
+                    handler.sendBytes(followOrUnfollow, 1);
+                }
+                else{ //followOrUnfollow = 0
+                    std::cout << "command to follow" << std::endl; //debug
+                    followOrUnfollow[0]= 0 ;
+                    handler.sendBytes(followOrUnfollow, 1);
+                }
+                delete followOrUnfollow;
+                handler.sendFrameAscii(words[2], '\0'); //username
+            }
+
+            else if ((currtWord.compare("POST") == 0)) {
                 shortToBytes((short) 5, currOptcode);
                 handler.sendBytes(currOptcode, 2);
 //                    string content = words[1];
