@@ -23,7 +23,7 @@ static void shortToBytes(short num, char* bytesArr) // from assi
 
 void keyboardThreadTask::operator()() {
         bool shouldTerminate=false;
-    while (!shouldTerminate  ) {//REGISTER YONI ABC 01-12-1990 LOGIN YONI ABC 1
+    while (!shouldTerminate  ) {//REGISTER B ABC 01-12-1990 LOGIN B ABC 1
         const short bufsize = 1024;
         char buf[bufsize];
         std::cin.getline(buf, bufsize);
@@ -70,12 +70,15 @@ void keyboardThreadTask::operator()() {
                 delete captcha;
 
             }
-
             else if ((currtWord.compare("LOGOUT") == 0)) {
-                shortToBytes((short) 3, currOptcode);
-                handler.sendBytes(currOptcode, 2);
-                if (*amILogin)
+                if (*amILogin){
                 shouldTerminate = true;
+                shortToBytes((short) 3, currOptcode);
+                handler.sendBytes(currOptcode, 2);}
+                else{
+                std::cout << "ACK 3;" << std::endl;
+                toSendEndline = false;
+                }
             }
 
             else if ((currtWord.compare("FOLLOW") == 0)) { //can be follow or unfollow- according to next byte
