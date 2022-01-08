@@ -23,7 +23,7 @@ static void shortToBytes(short num, char* bytesArr) // from assi
 
 void keyboardThreadTask::operator()() {
         bool shouldTerminate=false;
-    while (!shouldTerminate  ) {//REGISTER B ABC 01-12-1990 LOGIN B ABC 1
+    while (!shouldTerminate  ) {//REGISTER B ABC 01-12-1990 LOGIN A ABC 1
         const short bufsize = 1024;
         char buf[bufsize];
         std::cin.getline(buf, bufsize);
@@ -50,7 +50,7 @@ void keyboardThreadTask::operator()() {
                 handler.sendFrameAscii(words.at(3), '\0'); //birthday
 
 
-            } else if (currtWord.compare("LOGIN") == 0) {
+            } else if (currtWord.compare("LOGIN")==0 | currtWord.compare("login" ) == 0) {
                 shortToBytes((short) 2, currOptcode);
                 handler.sendBytes(currOptcode, 2);
 
@@ -58,19 +58,19 @@ void keyboardThreadTask::operator()() {
                 handler.sendFrameAscii(words.at(2), '\0'); //password
                 char *captcha = new char[1];
                 if (words.at(3).compare("1") == 0) {
-                    std::cout << "captcha is 1" << std::endl; //debug
+//                    std::cout << "captcha is 1" << std::endl; //debug
                     captcha[0] = 1;
                     handler.sendBytes(captcha, 1);
                 }
                 else{
-                    std::cout << "captcha is not 1" << std::endl; //debug
+//                    std::cout << "captcha is not 1" << std::endl; //debug
                     captcha[0]= 0 ;
                     handler.sendBytes(captcha, 1);
                 }
                 delete captcha;
 
             }
-            else if ((currtWord.compare("LOGOUT") == 0)) {
+            else if ((currtWord.compare("LOGOUT") == 0) | (currtWord.compare("logout") == 0)) {
                 if (*amILogin){
                 shouldTerminate = true;
                 shortToBytes((short) 3, currOptcode);
@@ -154,7 +154,7 @@ void keyboardThreadTask::operator()() {
 
 
         }
-    std::cout << "thread KEYBOARD is closing..." << std::endl;
+//    std::cout << "thread KEYBOARD is closing..." << std::endl;
     }
 
 

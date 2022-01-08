@@ -9,7 +9,7 @@ using boost::asio::ip::tcp;
 /**
 */
 int main (int argc, char *argv[]) {
-    std::cerr << "hiii " << std::endl;
+//    std::cerr << "hiii " << std::endl;
     if (argc < 3) {
         std::cerr << "Usage: " << argv[0] << " host port" << std::endl << std::endl;
         return -1;
@@ -32,7 +32,7 @@ int main (int argc, char *argv[]) {
     t1.join();
     t2.join();
     delete amILogin;
-    std::cout << "CLOSE PROGRAM PROPERLY" << std::endl; //DEBUG
+//    std::cout << "CLOSE PROGRAM PROPERLY" << std::endl; //DEBUG
     return 0;
 
 }
