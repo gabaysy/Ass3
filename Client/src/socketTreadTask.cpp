@@ -27,10 +27,10 @@ void socketTreadTask::operator()() {
         short optCode = bytesToShort(currBytes);
 
                 if (optCode==9){ //Notification
-                char optcodbyte[1];
-                handler.getBytes(optcodbyte, 1);
-                char type = optcodbyte[0];
-                string NotificationType;
+                    char optcodbyte[1];
+                    handler.getBytes(optcodbyte, 1);
+                    char type = optcodbyte[0];
+                    string NotificationType;
                     if (type == 0)
                         NotificationType="NOTIFICATION PM ";
                     else
@@ -38,13 +38,15 @@ void socketTreadTask::operator()() {
 
 //                short notificationtype = (short) type;
 
-                string name;
-                handler.getFrameAscii(name, '\0');
+                    string name;
+                    handler.getFrameAscii(name, '\0');
 
-                string content;
-                handler.getFrameAscii(content, '\0');
+                    string content;
+                    handler.getFrameAscii(content, '\0');
 
-                cout << NotificationType+ name.substr(1, name.length() - 1) + " " + content.substr(0, content.length() - 1) << endl;
+                    cout << NotificationType+ name.substr(0, name.length() - 1) + " " + content.substr(0, content.length() - 1) << endl;
+
+
                 }
 
 
