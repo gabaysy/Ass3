@@ -61,16 +61,17 @@ public class PMMsg implements Message {
         connections.send(connectionId, messageToReturn);
 
         //notification
-        User userToSendNotification=db.getUserByUsername(username);
-        NotificationMsg msgToSend=new NotificationMsg(
-                (byte) 0, //PM
-                db.getUsernameByConnectionID(connectionId), //posting user = this user
-                this.getContent()); //content
-        if(userToSendNotification.isloggedin()){
-            connections.send(userToSendNotification.getConnectionID(),msgToSend);
-        }
-        else {
-            db.addUnseenNotification(userToSendNotification.getUsername(),msgToSend);
+        if (success) { // only send pm if db.sendPM return true
+            User userToSendNotification = db.getUserByUsername(username);
+            NotificationMsg msgToSend = new NotificationMsg(
+                    (byte) 0, //PM
+                    db.getUsernameByConnectionID(connectionId), //posting user = this user
+                    this.getContent()); //content
+            if (userToSendNotification.isloggedin()) {
+                connections.send(userToSendNotification.getConnectionID(), msgToSend);
+            } else {
+                db.addUnseenNotification(userToSendNotification.getUsername(), msgToSend);
+            }
         }
     }
 }
