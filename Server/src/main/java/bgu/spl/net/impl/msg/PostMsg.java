@@ -57,7 +57,8 @@ public class PostMsg implements Message {
         if(UsersToSendNotificationDueToTag!=null && !UsersToSendNotificationDueToTag.isEmpty()) {
             for (User currUser : UsersToSendNotificationDueToTag) {
                 //check not to send notification again
-                if (usersToSendNotificationDueToFollow != null || !usersToSendNotificationDueToFollow.isEmpty() || !usersToSendNotificationDueToFollow.contains(currUser)) {
+                if (usersToSendNotificationDueToFollow != null && !usersToSendNotificationDueToFollow.isEmpty()){
+                if(!usersToSendNotificationDueToFollow.contains(currUser)) {
                     NotificationMsg msgToSend = new NotificationMsg(
                             (byte) 1, //Public
                             db.getUsernameByConnectionID(connectionId), //posting user = this user
@@ -67,6 +68,7 @@ public class PostMsg implements Message {
                     } else {
                         db.addUnseenNotification(currUser.getUsername(), msgToSend);
                     }
+                }
                 }
             }
         }
