@@ -5,6 +5,7 @@ import bgu.spl.net.api.bidi.Message;
 import bgu.spl.net.srv.BGS.BgsDB;
 import bgu.spl.net.srv.BGS.User;
 
+import java.util.HashSet;
 import java.util.LinkedList;
 
 public class PostMsg implements Message {
@@ -33,9 +34,10 @@ public class PostMsg implements Message {
                         new ACKMsg(this.getOptCode()) :
                         new ErrorMsg(this.getOptCode());
         connections.send(connectionId, messageToReturn);
-
+        if(!success)
+            return;
         //notification to users who follow me
-        LinkedList<User> usersToSendNotificationDueToFollow=db.usersToSendNotificationDueToFollow(connectionId);
+        HashSet<User> usersToSendNotificationDueToFollow=db.usersToSendNotificationDueToFollow(connectionId);
         if(usersToSendNotificationDueToFollow!=null && !usersToSendNotificationDueToFollow.isEmpty()) {
             for (User currUser : usersToSendNotificationDueToFollow) {
                 NotificationMsg msgToSend = new NotificationMsg(
@@ -51,17 +53,20 @@ public class PostMsg implements Message {
         }
 
         //notification to users I tagged
-        LinkedList<User> IDsToSendNotificationDueToTag=db.IDsToSendNotificationDueToTag(this.content);
-        if(IDsToSendNotificationDueToTag!=null && !IDsToSendNotificationDueToTag.isEmpty()) {
-            for (User currUser : IDsToSendNotificationDueToTag) {
-                NotificationMsg msgToSend = new NotificationMsg(
-                        (byte) 1, //Public
-                        db.getUsernameByConnectionID(connectionId), //posting user = this user
-                        this.getContent());
-                if (currUser.isloggedin()) {
-                    connections.send(currUser.getConnectionID(), msgToSend); //content
-                } else {
-                    db.addUnseenNotification(currUser.getUsername(), msgToSend);
+        HashSet<User> UsersToSendNotificationDueToTag=db.UsersToSendNotificationDueToTag(connectionId, this.content);
+        if(UsersToSendNotificationDueToTag!=null && !UsersToSendNotificationDueToTag.isEmpty()) {
+            for (User currUser : UsersToSendNotificationDueToTag) {
+                //check not to send notification again
+                if (usersToSendNotificationDueToFollow != null || !usersToSendNotificationDueToFollow.isEmpty() || !usersToSendNotificationDueToFollow.contains(currUser)) {
+                    NotificationMsg msgToSend = new NotificationMsg(
+                            (byte) 1, //Public
+                            db.getUsernameByConnectionID(connectionId), //posting user = this user
+                            this.getContent());
+                    if (currUser.isloggedin()) {
+                        connections.send(currUser.getConnectionID(), msgToSend); //content
+                    } else {
+                        db.addUnseenNotification(currUser.getUsername(), msgToSend);
+                    }
                 }
             }
         }

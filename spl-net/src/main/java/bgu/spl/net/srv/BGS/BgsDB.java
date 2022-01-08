@@ -3,10 +3,7 @@ package bgu.spl.net.srv.BGS;
 import bgu.spl.net.impl.msg.LogStatInfo;
 import bgu.spl.net.impl.msg.NotificationMsg;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -77,10 +74,13 @@ public boolean register (String name, String code, String date,int connectionId)
     public boolean follow(int connectionIdCurrUser, String usernameToFollow){
         if (!usersById.containsKey(connectionIdCurrUser))
             return false;
-        User user =usersById.get(connectionIdCurrUser);
-        if (! users.containsKey(usernameToFollow)  || (!user.isloggedin())||(user.isBlocked(users.get(usernameToFollow) )) )// not register/not logging/blocked
+        User me =usersById.get(connectionIdCurrUser);
+        User whoIwantToFollow= users.get(usernameToFollow);
+        if (! users.containsKey(usernameToFollow)  || (! me.isloggedin())||( me.isBlocked(whoIwantToFollow)) )// not register/not logging/users I block
             return false;
-        return user.follow(users.get(usernameToFollow));//false if already following
+        if(whoIwantToFollow.isBlocked(me))
+            return false;//user who blocked me
+        return me.follow(users.get(usernameToFollow));//false if already following
 
     }
 
@@ -134,12 +134,13 @@ public boolean register (String name, String code, String date,int connectionId)
         if (!usersById.containsKey(connectionIdCurrUser)|| (!usersById.get(connectionIdCurrUser).isloggedin()))
             return null;
         HashMap<User, LogStatInfo> mapToReturn=new HashMap<>();
-
+        User myUser=usersById.get(connectionIdCurrUser);
         for(String name : usernames) {
-            if (!users.containsKey(name)) {
-                System.out.println("error in stat- no such user");
+            User currUser=users.get(name);
+            if (!users.containsKey(name) || myUser.isBlocked(currUser) || currUser.isBlocked(myUser)) {
+                return null;
             } else {
-                User currUser = users.get(name);
+             //   User currUser = users.get(name);
                 mapToReturn.put(currUser, new LogStatInfo(currUser.getAge(), currUser.getNumPost(), currUser.getNumOfFollowers(), currUser.getNumOfFolloweing()));
             }
         }
@@ -164,22 +165,34 @@ public boolean register (String name, String code, String date,int connectionId)
         return this.usersById.get(connectionID).getUsername();
     }
 
-    public LinkedList<User> usersToSendNotificationDueToFollow(int senderConnectionID){
-        LinkedList followersList =new LinkedList<User>();
-        for (User curUser : usersById.get(senderConnectionID).getfollowers() )
-            followersList.add(curUser.getUsername());
+    public HashSet<User> usersToSendNotificationDueToFollow(int senderConnectionID){
+        HashSet followersList =new HashSet<User>();
+        User myUser= usersById.get(senderConnectionID);
+        for (User curUser : usersById.get(senderConnectionID).getfollowers() ){
+           // followersList.add(curUser.getUsername());
+            //check blocking:
+            if(!curUser.isBlocked(myUser) && !myUser.isBlocked(curUser)) {
+                followersList.add(curUser);
+            }
+        }
+
         return followersList;
     }
 
 
-    public LinkedList<User> IDsToSendNotificationDueToTag(String content){
-        LinkedList<User> toRet= new LinkedList<>();
+    public HashSet<User> UsersToSendNotificationDueToTag(int senderConnectionID, String content){
+        HashSet<User> toRet= new HashSet<>();
         String currname;
+        User myUser= usersById.get(senderConnectionID);
         for (User curruser : this.users.values())
         {
             currname="@"+curruser.getUsername();
-            if (content.contains(currname))
-                toRet.add(curruser);
+            if (content.contains(currname)){
+                if(!curruser.isBlocked(myUser) && !myUser.isBlocked(curruser)) {
+                    toRet.add(curruser);
+                }
+            }
+
         }
         return toRet;
     }
