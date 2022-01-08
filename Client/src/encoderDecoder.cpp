@@ -76,7 +76,7 @@ void keyboardThreadTask::operator()() {
                 shortToBytes((short) 3, currOptcode);
                 handler.sendBytes(currOptcode, 2);}
                 else{
-                std::cout << "ACK 3;" << std::endl;
+                std::cout << "ERROR 3;" << std::endl;
                 toSendEndline = false;
                 }
             }
@@ -89,12 +89,12 @@ void keyboardThreadTask::operator()() {
 
                 char *followOrUnfollow = new char[1];
                 if (words.at(1).compare("1") == 0) {
-                    std::cout << "command to unfollow" << std::endl; //debug
+           //         std::cout << "command to unfollow" << std::endl; //debug
                     followOrUnfollow[0] = 1;
                     handler.sendBytes(followOrUnfollow, 1);
                 }
                 else{ //followOrUnfollow = 0
-                    std::cout << "command to follow" << std::endl; //debug
+             //       std::cout << "command to follow" << std::endl; //debug
                     followOrUnfollow[0]= 0 ;
                     handler.sendBytes(followOrUnfollow, 1);
                 }
