@@ -36,6 +36,8 @@ public class Reactor<T> implements Server<T> {
         this.port = port;
         this.protocolFactory = protocolFactory;
         this.readerFactory = readerFactory;
+        myConnections=new ConnectionsImp();
+
     }
 
     @Override
@@ -102,7 +104,8 @@ public class Reactor<T> implements Server<T> {
                 readerFactory.get(),
                 protocolFactory.get(),
                 clientChan,
-                this);
+                this,
+                myConnections);
         clientChan.register(selector, SelectionKey.OP_READ, handler);
     }
 
