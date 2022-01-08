@@ -57,4 +57,13 @@ public class NotificationMsg implements Message {
     public short getPM_PublicInShort() {
         return PM_PublicInShort;
     }
+    public byte getPM_PublicInByte() {
+        short zero=0;
+        byte zeroB = 0;
+        byte oneB =1;
+        if (PM_PublicInShort==zero){
+            return zeroB;
+        }
+        return oneB;
+    }
 }
