@@ -6,6 +6,7 @@ import java.util.Set;
 public class FilteredWords {
     private static HashSet<String> toFilter = new HashSet<String>(){{
         add("fuck");
+        add("ass");
         //HardCoded words
     }};
 

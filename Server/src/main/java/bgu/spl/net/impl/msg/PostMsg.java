@@ -54,11 +54,17 @@ public class PostMsg implements Message {
 
         //notification to users I tagged
         HashSet<User> UsersToSendNotificationDueToTag=db.UsersToSendNotificationDueToTag(connectionId, this.content);
+        boolean toSend;
         if(UsersToSendNotificationDueToTag!=null && !UsersToSendNotificationDueToTag.isEmpty()) {
             for (User currUser : UsersToSendNotificationDueToTag) {
+                toSend=true;
                 //check not to send notification again
-                if (usersToSendNotificationDueToFollow != null && !usersToSendNotificationDueToFollow.isEmpty()){
-                if(!usersToSendNotificationDueToFollow.contains(currUser)) {
+                if (usersToSendNotificationDueToFollow != null && !usersToSendNotificationDueToFollow.isEmpty()) {
+                    if (usersToSendNotificationDueToFollow.contains(currUser)) {
+                        toSend = false;
+                    }
+                }
+                if(toSend){
                     NotificationMsg msgToSend = new NotificationMsg(
                             (byte) 1, //Public
                             db.getUsernameByConnectionID(connectionId), //posting user = this user
@@ -73,5 +79,5 @@ public class PostMsg implements Message {
             }
         }
     }
-}
+
 

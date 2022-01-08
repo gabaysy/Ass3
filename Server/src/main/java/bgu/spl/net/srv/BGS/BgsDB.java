@@ -26,7 +26,7 @@ public boolean register (String name, String code, String date,int connectionId)
         User userToAdd= new User(name , code , date, -1);
         users.putIfAbsent(name,userToAdd);
 //        usersById.putIfAbsent(connectionId, userToAdd);
-        System.out.println("user "+userToAdd.getUsername()+ " is register"); //debug
+//        System.out.println("user "+userToAdd.getUsername()+ " is register"); //debug
         return true;
 }
 
@@ -36,7 +36,7 @@ public boolean register (String name, String code, String date,int connectionId)
         users.get(name).login();
         if (users.get(name).getConnectionID()!=connectionId)
             changeConnectionIdInListAndUser(connectionId,name);
-        System.out.println("user "+name+ " is logIn"); //debug
+//        System.out.println("user "+name+ " is logIn"); //debug
         return true;
     }
 
