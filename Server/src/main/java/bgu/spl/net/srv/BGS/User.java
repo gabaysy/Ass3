@@ -36,7 +36,7 @@ public class User {
         this.connectionID=connectionID;
         this.unSeenNotifications=new ConcurrentLinkedDeque<NotificationMsg>();
         int birthYear= Integer.parseInt(this.birthday.substring(6,10)); //todo reall date
-        this.age=(2022-birthYear);
+        this.age=(2021-birthYear);
     }
 
     public boolean login(){
