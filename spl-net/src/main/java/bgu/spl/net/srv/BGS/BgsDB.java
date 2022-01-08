@@ -98,7 +98,7 @@ public boolean register (String name, String code, String date,int connectionId)
         if (!usersById.containsKey(connectionIdCurrUser)|| (!usersById.get(connectionIdCurrUser).isloggedin())) //curruser not register or not logged in
             return false;
         this.posts.add(new post(usersById.get(connectionIdCurrUser),content, null )); //save PM
-
+        usersById.get(connectionIdCurrUser).icrNumPost();
         //Todo really send the PM
 
         return true;
@@ -108,7 +108,7 @@ public boolean register (String name, String code, String date,int connectionId)
         if (!usersById.containsKey(connectionIdCurrUser)|| (!usersById.get(connectionIdCurrUser).isloggedin()) || ! users.containsKey(userToSendToHim)) //curruser not register or not logged in or userToSendToHim not register
             return false;
         User currUser=usersById.get(connectionIdCurrUser);
-        if (!currUser.isFollowingAfter(userToSendToHim)) // not Following
+        if (!currUser.isFollowingAfter(users.get(userToSendToHim)) )// not Following
             return false;
         this.posts.add(new post(currUser,content, users.get(userToSendToHim) )); //save PM
         //Todo really send the PM
@@ -119,10 +119,11 @@ public boolean register (String name, String code, String date,int connectionId)
         if (!usersById.containsKey(connectionIdCurrUser)|| (!usersById.get(connectionIdCurrUser).isloggedin())) //curruser not register or not logged in
             return null;
         HashMap<User, LogStatInfo> mapToReturn=new HashMap<>();
-
+        User myUser=usersById.get(connectionIdCurrUser);
         for( Map.Entry name: users.entrySet()) //todo make sure its ok
         {
             User currUser = (User) name.getValue();
+            if (currUser.isloggedin() && !myUser.isBlocked(currUser)) //only logged users and not blocked
             mapToReturn.put(currUser,new LogStatInfo(currUser.getAge(),currUser.getNumPost(),currUser.getNumOfFollowers(),currUser.getNumOfFolloweing()));
         }
         return mapToReturn;

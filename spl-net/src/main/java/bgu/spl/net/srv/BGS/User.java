@@ -35,7 +35,7 @@ public class User {
         this.loggedin=new AtomicBoolean(false);
         this.connectionID=connectionID;
         this.unSeenNotifications=new ConcurrentLinkedDeque<NotificationMsg>();
-        int birthYear= Integer.parseInt(this.birthday.substring(6,10)); //todo make sure index
+        int birthYear= Integer.parseInt(this.birthday.substring(6,10)); //todo reall date
         this.age=(2022-birthYear);
     }
 
@@ -98,8 +98,8 @@ public class User {
         return NumPost;
     }
 
-    public void setNumPost(int numPost) {
-        NumPost = numPost;
+    public void icrNumPost() {
+        NumPost++;
     }
 
 
@@ -107,13 +107,13 @@ public class User {
         return loggedin.get();
     }
 
-    public boolean isFollowingAfter(String name) {
-        return (followings.contains(name));
+    public boolean isFollowingAfter(User userToCheck) {
+        return (followings.contains(userToCheck));
 
     }
 
     public boolean follow(User usernameToFollow) {
-        if ( isFollowingAfter(usernameToFollow.getUsername()) )
+        if ( isFollowingAfter(usernameToFollow) )
             return false;
         synchronized (this.followings){
         this.followings.add(usernameToFollow);}
@@ -123,7 +123,7 @@ public class User {
     }
 
     public boolean unfollow(User usernameToUnFollow) {
-        if ( !isFollowingAfter(usernameToUnFollow.getUsername()) )
+        if ( !isFollowingAfter(usernameToUnFollow) )
             return false;
         synchronized(this.followings){
         this.followings.remove(usernameToUnFollow);}
@@ -136,6 +136,7 @@ public class User {
 
     public void addToBlocked(User userToBlock) {
         this.blocked.add(userToBlock);
+        userToBlock.blocked.add(this);
     }
 
     public boolean isBlocked(User userToCheck) {
